@@ -47,13 +47,13 @@ class report_bbbparticipation_renderer extends plugin_renderer_base {
                 'format' => report_bbbparticipation_base::FORMAT_XLSX
         ];
         $checkmarks = $report->get_instances();
-/*         $tabletoolbar = html_writer::tag('div', $this->get_downloadlinks(['checkmarks' => $checkmarks], $data),
+        /*         $tabletoolbar = html_writer::tag('div', $this->get_downloadlinks(['checkmarks' => $checkmarks], $data),
                  ['class' => 'download']);
          $tabletoolbar .= html_writer::tag('div', $this->get_reset_table_preferences_link($report));
          $out = html_writer::tag('div', $tabletoolbar, ['class' => 'tabletoolbar']); */
         // Render the table!
         $table = $report->get_table();
-/*         $out .= html_writer::tag('div', $this->table($table, $report),
+        /*         $out .= html_writer::tag('div', $this->table($table, $report),
              ['class' => 'scrollforced']); */
         $out = html_writer::tag('div', $this->table($table, $report),
                 ['class' => 'scrollforced']);

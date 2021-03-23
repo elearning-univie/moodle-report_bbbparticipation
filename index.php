@@ -43,7 +43,7 @@ $action     = optional_param('action', '', PARAM_ALPHA);
 $page       = optional_param('page', 0, PARAM_INT);                     // which page to show
 $perpage    = optional_param('perpage', DEFAULT_PAGE_SIZE, PARAM_INT);  // how many per page
 
-$url = new moodle_url('/report/bbbparticipation/index.php', array('id'=>$id));
+$url = new moodle_url('/report/bbbparticipation/index.php', array('id' => $id));
 if ($roleid !== 0) {
     $url->param('roleid');
 }

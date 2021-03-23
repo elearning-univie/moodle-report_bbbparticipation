@@ -235,7 +235,7 @@ class report_bbbparticipation_base {
         foreach ($instances as $instance) {
             $params['bbbid'] = $instance->id;
             $bbbsessionstime = $this->get_session_time_for_instance($instance->id);
-            $numberses = sizeof($bbbsessionstime);
+            $numberses = count($bbbsessionstime);
             if ($numberses > 0) {
                 for ($sctr = 0; $sctr < $numberses; $sctr++) {
                     $inbetweensql = '> :start';
@@ -245,7 +245,7 @@ class report_bbbparticipation_base {
                         $params['startnext'] = $bbbsessionstime[$sctr + 1];
                     }
                     $insql = "IF(u.id IN (
-                              SELECT DISTINCT(l.userid) FROM {bigbluebuttonbn_logs} as l
+                              SELECT DISTINCT(l.userid) FROM {bigbluebuttonbn_logs} l
                                WHERE l.bigbluebuttonbnid = :bbbid
                                  AND l.log  = 'Join'
                                  AND l.timecreated " . $inbetweensql . "),

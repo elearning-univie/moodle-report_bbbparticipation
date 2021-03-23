@@ -91,10 +91,10 @@ class report_bbbparticipation_overview extends report_bbbparticipation_base impl
 
                 $instances = $this->get_courseinstances();
 
-                foreach ($instances as $instance) {
+            foreach ($instances as $instance) {
 
                 $bbbsessionstime = $this->get_session_time_for_instance($instance->id);
-                $span = sizeof($bbbsessionstime);
+                $span = count($bbbsessionstime);
                 if ($span > 0) {
                     $tableheaders['instance' . $instance->id] = new html_table_cell($instance->name);
                     $tableheaders['instance' . $instance->id]->header = true;
@@ -122,7 +122,7 @@ class report_bbbparticipation_overview extends report_bbbparticipation_base impl
                         }
                     }
                 }
-            }
+                }
 
             $table->head = [];
             $table->head[0] = new html_table_row();
@@ -140,23 +140,23 @@ class report_bbbparticipation_overview extends report_bbbparticipation_base impl
                     $userlink = html_writer::link($userurl, fullname($curuser, has_capability('moodle/site:viewfullnames', $context)));
                     $row['fullnameuser'] = new html_table_cell($userlink);
                     $ictr = 1;
-                    foreach ($instances as $instance) {
+                foreach ($instances as $instance) {
                         $bbbsessionstime = $this->get_session_time_for_instance($instance->id);
                         $span = count($bbbsessionstime);
-                        if ($span > 0) {
+                    if ($span > 0) {
                             $sctr = 0;
-                            foreach ($bbbsessionstime as $session) {
+                        foreach ($bbbsessionstime as $session) {
                                 $text = get_string('yes');
-                                if ($participationdata['i'. $ictr. 's' . $sctr][$userid] == 0 ) {
+                            if ($participationdata['i'. $ictr. 's' . $sctr][$userid] == 0 ) {
                                     $text = get_string('no');
-                                }
+                            }
                                 $row['i'. $ictr . 's' . $sctr] = new html_table_cell($text);
                                 $row['i'. $ictr . 's' . $sctr]->attributes['class'] = 'instance' . $instance->id . ' time' . ($sctr + 1);
                                 $sctr++;
-                            }
                         }
+                    }
                     $ictr++;
-            }
+                    }
 
                 $table->data[$userid] = new html_table_row();
                 $table->data[$userid]->cells = $row;
