@@ -15,18 +15,36 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Lang strings
+ * Capabilities
  *
- * @package    report
- * @subpackage bbbparticipation
+ * @package    report_bbbparticipation
  * @copyright  2021 University of Vienna
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['allbbbs'] = 'All BBBs';
-$string['bbbparticipationreport'] = 'BBB participation report';
-$string['exportas'] = 'Export as';
-$string['modulenameplural'] = 'BBBs';
-$string['pluginname'] = 'BBB participation';
-$string['privacy:metadata'] = 'The BBB participation plugin does not store any personal data.';
-$string['update'] = 'Update';
+defined('MOODLE_INTERNAL') || die();
+
+$capabilities = array(
+
+    'report/bbbparticipation:students' => array(
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_MODULE,
+        'archetypes' => array(
+            'student' => CAP_ALLOW
+        )
+    ),
+    'report/bbbparticipation:view' => array(
+        'riskbitmask' => RISK_PERSONAL,
+        'captype' => 'read',
+        'contextlevel' => CONTEXT_COURSE,
+        'archetypes' => array(
+            'teacher' => CAP_ALLOW,
+            'editingteacher' => CAP_ALLOW,
+            'manager' => CAP_ALLOW
+        ),
+
+        'clonepermissionsfrom' => 'coursereport/bbbparticipation:view',
+    )
+);
+
+

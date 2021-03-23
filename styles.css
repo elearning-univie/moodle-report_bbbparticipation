@@ -1,0 +1,115 @@
+/*
+// This file is part of local_checkmarkreport for Moodle - http://moodle.org/
+//
+// It is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// It is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/**
+ * Styles for local_checkmarkreport
+ *
+ * @package   report_bbbparticipation
+ * @copyright  2021 University of Vienna
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+/** General Styles **/
+.path-report-bbbparticipation .form-inline.felement label {
+    margin-right: 0;
+}
+
+.path-report-bbbparticipation .break {
+    flex-basis: 100%;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+}
+
+.path-report-bbbparticipation div.scrollforced {
+    overflow-x: scroll;
+    width: 100%;
+}
+
+.path-report-bbbparticipation span.downloadlink {
+    margin-bottom: 2em;
+    margin-left: 1em;
+    margin-right: 1em;
+}
+
+.path-report-bbbparticipation table .hiddencol .hidecol,
+.path-report-bbbparticipation table .showcol,
+.path-report-bbbparticipation table .hiddencol .content {
+    display: none;
+}
+
+.path-report-bbbparticipation table .hiddencol .showcol,
+.path-report-bbbparticipation table .hidecol,
+.path-report-bbbparticipation table .content {
+    display: inline;
+    white-space: nowrap;
+}
+
+.path-report-bbbparticipation table .hiddencol {
+    margin: 0;
+    padding: 0;
+}
+
+.path-report-bbbparticipation table .hidecol {
+    margin-left: 3px;
+}
+
+.path-report-bbbparticipation table.userview th.cell {
+    text-align: center;
+}
+
+.path-report-bbbparticipation table tr {
+    white-space: nowrap;
+}
+
+.path-report-bbbparticipation table td {
+    text-align: center;
+}
+
+.path-report-bbbparticipation table td.fullnameuser,
+.path-report-bbbparticipation table td.email {
+    text-align: left;
+}
+
+.path-report-bbbparticipation .overview .current,
+.path-report-bbbparticipation .useroverview .current {
+    background: #f3e4c0;
+}
+
+.path-report-bbbparticipation .overview .current::before,
+.path-report-bbbparticipation .useroverview .current::before {
+    /* Prevents theme_boost course content css injecting left-border before cells! */
+    content: none;
+}
+
+.path-report-bbbparticipation .useroverview .checked,
+.path-report-bbbparticipation .useroverview .points,
+.path-report-bbbparticipation .useroverview .attendance {
+    /* Minimum width for these cells */
+    white-space: nowrap;
+    width: 1%;
+}
+
+.path-report-bbbparticipation [role=tooltip] {
+    /* Timing has to be synced with JS! */
+    transition: opacity 200ms ease-in-out;
+}
+
+.tabletoolbar {
+    display: flex;
+    justify-content: space-between;
+}

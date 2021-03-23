@@ -15,18 +15,24 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Lang strings
+ * This file contains functions used by the participation reports
  *
- * @package    report
- * @subpackage bbbparticipation
- * @copyright  2021 University of Vienna
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   report_bbbparticipation
+ * @copyright 2021 University of Vienna
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['allbbbs'] = 'All BBBs';
-$string['bbbparticipationreport'] = 'BBB participation report';
-$string['exportas'] = 'Export as';
-$string['modulenameplural'] = 'BBBs';
-$string['pluginname'] = 'BBB participation';
-$string['privacy:metadata'] = 'The BBB participation plugin does not store any personal data.';
-$string['update'] = 'Update';
+defined('MOODLE_INTERNAL') || die();
+
+/**
+ * Returns list of all BBB activities in this course
+ * 
+ * @param int $id
+ * @return array
+ */
+function report_bbbparticipation_get_bbb_activities_for_course(int $id) {
+    global $DB;
+
+    $bbblist = $DB->get_records('bigbluebuttonbn',['course'=>$id]);
+    return $bbblist;
+}

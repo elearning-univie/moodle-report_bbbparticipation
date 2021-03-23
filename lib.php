@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Lang strings
+ * This file contains functions used by the participation report
  *
  * @package    report
  * @subpackage bbbparticipation
@@ -23,10 +23,20 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['allbbbs'] = 'All BBBs';
-$string['bbbparticipationreport'] = 'BBB participation report';
-$string['exportas'] = 'Export as';
-$string['modulenameplural'] = 'BBBs';
-$string['pluginname'] = 'BBB participation';
-$string['privacy:metadata'] = 'The BBB participation plugin does not store any personal data.';
-$string['update'] = 'Update';
+defined('MOODLE_INTERNAL') || die;
+
+/**
+ * This function extends the navigation with the report items
+ *
+ * @param navigation_node $navigation The navigation node to extend
+ * @param stdClass $course The course to object for the report
+ * @param stdClass $context The context of the course
+ */
+function report_bbbparticipation_extend_navigation_course($navigation, $course, $context) {
+    global $CFG, $OUTPUT;
+    if (has_capability('report/bbbparticipation:view', $context)) {
+        $url = new moodle_url('/report/bbbparticipation/index.php', array('id'=>$course->id));
+        $navigation->add(get_string('pluginname', 'report_bbbparticipation'), $url, navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
+    }
+}
+
