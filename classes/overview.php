@@ -122,7 +122,7 @@ class report_bbbparticipation_overview extends report_bbbparticipation_base impl
                         }
                     }
                 }
-                }
+            }
 
             $table->head = [];
             $table->head[0] = new html_table_row();
@@ -156,7 +156,7 @@ class report_bbbparticipation_overview extends report_bbbparticipation_base impl
                         }
                     }
                     $ictr++;
-                    }
+                }
 
                 $table->data[$userid] = new html_table_row();
                 $table->data[$userid]->cells = $row;
