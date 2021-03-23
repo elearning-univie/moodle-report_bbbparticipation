@@ -17,8 +17,7 @@
 /**
  * BBB Participation report
  *
- * @package    report
- * @subpackage bbbparticipation
+ * @package   report_bbbparticipation
  * @copyright  2021 University of Vienna
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
