@@ -202,7 +202,7 @@ class report_bbbparticipation_base {
      * Get all starttimes for certain bbb instance in course indexed by bbb id
      *
      * @param int $bbbid
-     * 
+     *
      * @return object[] associative array of checkmark instances indexed by checkmark ids
      */
     public function get_session_time_for_instance(int $bbbid) {
