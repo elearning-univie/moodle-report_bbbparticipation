@@ -63,7 +63,7 @@ class report_bbbparticipation_reportfilterform extends moodleform {
         $mform->setType('userid', PARAM_INT);
 
         $bbbs = report_bbbparticipation_get_bbb_activities_for_course($COURSE->id);
-        
+
         $bbbselects = [get_string('allbbbs', 'report_bbbparticipation')];
         foreach ($bbbs as $bbbs) {
             $bbbselects[$bbbs->id] = $bbbs->name;

@@ -44,12 +44,24 @@ $page       = optional_param('page', 0, PARAM_INT);                     // which
 $perpage    = optional_param('perpage', DEFAULT_PAGE_SIZE, PARAM_INT);  // how many per page
 
 $url = new moodle_url('/report/bbbparticipation/index.php', array('id'=>$id));
-if ($roleid !== 0) $url->param('roleid');
-if ($instanceid !== 0) $url->param('instanceid');
-if ($timefrom !== 0) $url->param('timefrom');
-if ($action !== '') $url->param('action');
-if ($page !== 0) $url->param('page');
-if ($perpage !== DEFAULT_PAGE_SIZE) $url->param('perpage');
+if ($roleid !== 0) {
+    $url->param('roleid');
+}
+if ($instanceid !== 0) {
+    $url->param('instanceid');
+}
+if ($timefrom !== 0) {
+    $url->param('timefrom');
+}
+if ($action !== '') {
+    $url->param('action');
+}
+if ($page !== 0) {
+    $url->param('page');
+}
+if ($perpage !== DEFAULT_PAGE_SIZE) {
+    $url->param('perpage');
+}
 $PAGE->set_url($url);
 $PAGE->set_pagelayout('admin');
 
@@ -57,18 +69,18 @@ if ($action != 'view' and $action != 'post') {
     $action = ''; // default to all (don't restrict)
 }
 
-if (!$course = $DB->get_record('course', array('id'=>$id))) {
+if (!$course = $DB->get_record('course', array('id' => $id))) {
     print_error('invalidcourse');
 }
 
-if ($roleid != 0 and !$role = $DB->get_record('role', array('id'=>$roleid))) {
+if ($roleid != 0 and !$role = $DB->get_record('role', array('id' => $roleid))) {
     print_error('invalidrole');
 }
 
 require_login($course);
 $context = context_course::instance($course->id);
 require_capability('report/bbbparticipation:view', $context);
-$strparticipation = get_string('bbbparticipationreport','report_bbbparticipation');
+$strparticipation = get_string('bbbparticipationreport', 'report_bbbparticipation');
 $PAGE->set_title(format_string($course->shortname, true, array('context' => $context)) .': '. $strparticipation);
 $PAGE->set_heading(format_string($course->fullname, true, array('context' => $context)));
 $PAGE->set_context($context);

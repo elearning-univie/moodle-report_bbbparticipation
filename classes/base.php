@@ -153,7 +153,7 @@ class report_bbbparticipation_base {
             $userids = get_enrolled_users($context, '', 0, 'u.*', 'lastname ASC');
         }
         list($sqluserids, $userparams) = $DB->get_in_or_equal($userids, SQL_PARAMS_NAMED, 'user');
-        
+
         $sql = 'SELECT ' . $ufields . '
                       FROM {user} u
                      WHERE u.id ' . $sqluserids . '
@@ -162,7 +162,7 @@ class report_bbbparticipation_base {
         $data = $DB->get_records_sql($sql, $userparams);
 
         if (!empty($userids)) {
-            
+
             return $data;
         }
 
@@ -206,10 +206,10 @@ class report_bbbparticipation_base {
     public function get_session_time_for_instance(int $bbbid) {
         global $DB;
         if (!empty($this->courseid)) {
-            $sql = "SELECT timecreated FROM {bigbluebuttonbn_logs} 
+            $sql = "SELECT timecreated FROM {bigbluebuttonbn_logs}
                      WHERE bigbluebuttonbnid = :bbbid
                        AND log = 'Create';";
-            $bbbsessionstime = $DB->get_fieldset_sql($sql,['bbbid'=>$bbbid]);
+            $bbbsessionstime = $DB->get_fieldset_sql($sql, ['bbbid' => $bbbid]);
             return $bbbsessionstime;
         } else {
             return null;
@@ -240,16 +240,16 @@ class report_bbbparticipation_base {
                 for ($sctr = 0; $sctr < $numberses; $sctr++) {
                     $inbetweensql = '> :start';
                     $params['start'] = $bbbsessionstime[$sctr];
-                    if($sctr != ($numberses-1)) {
+                    if ($sctr != ($numberses - 1)) {
                         $inbetweensql = 'BETWEEN :start AND (:startnext -1)';
-                        $params['startnext'] = $bbbsessionstime[$sctr+1];
-                    } 
+                        $params['startnext'] = $bbbsessionstime[$sctr + 1];
+                    }
                     $insql = "IF(u.id IN (
                               SELECT DISTINCT(l.userid) FROM {bigbluebuttonbn_logs} as l
                                WHERE l.bigbluebuttonbnid = :bbbid
                                  AND l.log  = 'Join'
                                  AND l.timecreated " . $inbetweensql . "),
-                              '1','0') AS att";
+                              '1','0') att";
                     $sql = 'SELECT u.id, ' . $insql . ' FROM {user} u ' .
                         'LEFT JOIN (' . $esql . ') eu ON eu.id=u.id ' .
                         'WHERE u.deleted = 0 AND eu.id=u.id ';
@@ -258,7 +258,7 @@ class report_bbbparticipation_base {
                         $sql .= ' AND u.id ' . $insql;
                         $params = array_merge($params, $inparams);
                     }
-                    
+
                     $attend = $DB->get_records_sql_menu($sql, $params);
                     $data['i'. $ictr. 's' . $sctr] = $attend;
                 }

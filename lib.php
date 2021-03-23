@@ -35,7 +35,7 @@ defined('MOODLE_INTERNAL') || die;
 function report_bbbparticipation_extend_navigation_course($navigation, $course, $context) {
     global $CFG, $OUTPUT;
     if (has_capability('report/bbbparticipation:view', $context)) {
-        $url = new moodle_url('/report/bbbparticipation/index.php', array('id'=>$course->id));
+        $url = new moodle_url('/report/bbbparticipation/index.php', array('id' => $course->id));
         $navigation->add(get_string('pluginname', 'report_bbbparticipation'), $url, navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
     }
 }

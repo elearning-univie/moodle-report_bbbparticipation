@@ -26,13 +26,13 @@ defined('MOODLE_INTERNAL') || die();
 
 /**
  * Returns list of all BBB activities in this course
- * 
+ *
  * @param int $id
  * @return array
  */
 function report_bbbparticipation_get_bbb_activities_for_course(int $id) {
     global $DB;
 
-    $bbblist = $DB->get_records('bigbluebuttonbn',['course'=>$id]);
+    $bbblist = $DB->get_records('bigbluebuttonbn', ['course' => $id]);
     return $bbblist;
 }

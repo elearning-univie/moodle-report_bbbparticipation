@@ -89,82 +89,81 @@ class report_bbbparticipation_overview extends report_bbbparticipation_base impl
             ];
             $table->colclasses['fullnameuser'] = 'fullnameuser';
 
-        $instances = $this->get_courseinstances();
+                $instances = $this->get_courseinstances();
 
-         foreach ($instances as $instance) {
+                foreach ($instances as $instance) {
 
-             $bbbsessionstime = $this->get_session_time_for_instance($instance->id);
-             $span = sizeof($bbbsessionstime);
-             if ($span > 0) {
-                 $tableheaders['instance' . $instance->id] = new html_table_cell($instance->name);
-                 $tableheaders['instance' . $instance->id]->header = true;
-                 $tableheaders['instance' . $instance->id]->scope = 'colgroup';
-                 $table->colclasses['instance' . $instance->id] = 'instance' . $instance->id;
-
-                 for ($i = 1; $i < $span; $i++) {
-                     // Insert empty cells for the colspan!
-                     $tableheaders[] = null;
-                 }
-                 $tableheaders['instance' . $instance->id]->colspan = $span;
-                 $table->colgroups[] = [
-                     'span' => $span,
-                     'class' => 'instancegroup'
-                 ];
-
-                 if (!empty($bbbsessionstime)) {
-                       $ctr = 1;
-                       foreach ($bbbsessionstime as $bbbstarts) {
-                           $tableheaders2['time' . $ctr . 'i' . $instance->id] = new html_table_cell(date('d.m.Y H:m',$bbbstarts)); 
-                           $tableheaders2['time' . $ctr . 'i' . $instance->id]->header = true;
-                           $tablecolumns[] = 'time' . $ctr . 'i' . $instance->id;
-                           $table->colclasses['time' . $ctr . 'i' . $instance->id] = 'instance' . $instance->id . ' time' . $ctr;
-                         $ctr++;
-                     }
-                 }
-             }
-         }
-
-        $table->head = [];
-        $table->head[0] = new html_table_row();
-        $table->head[0]->cells = $tableheaders;
-        $table->head[1] = new html_table_row();
-        $table->head[1]->cells = $tableheaders2;
-
-        foreach ($data as $userid => $curuser) {
-            $row = [];
-            $userurl = new moodle_url('/user/view.php', [
-                    'id' => $userid,
-                    'course' => $this->courseid
-            ]);
-
-            $userlink = html_writer::link($userurl, fullname($curuser, has_capability('moodle/site:viewfullnames', $context)));
-            $row['fullnameuser'] = new html_table_cell($userlink);
-            $ictr = 1;
-            foreach ($instances as $instance) {
                 $bbbsessionstime = $this->get_session_time_for_instance($instance->id);
                 $span = sizeof($bbbsessionstime);
-                
                 if ($span > 0) {
-                    $sctr = 0;
-                    foreach ($bbbsessionstime as $session) {
-                        $text = get_string('yes');
-                        if ($participationdata['i'. $ictr. 's' . $sctr][$userid] == 0 ) {
-                            $text = get_string('no');
+                    $tableheaders['instance' . $instance->id] = new html_table_cell($instance->name);
+                    $tableheaders['instance' . $instance->id]->header = true;
+                    $tableheaders['instance' . $instance->id]->scope = 'colgroup';
+                    $table->colclasses['instance' . $instance->id] = 'instance' . $instance->id;
+
+                    for ($i = 1; $i < $span; $i++) {
+                        // Insert empty cells for the colspan!
+                        $tableheaders[] = null;
+                    }
+                    $tableheaders['instance' . $instance->id]->colspan = $span;
+                    $table->colgroups[] = [
+                     'span' => $span,
+                     'class' => 'instancegroup'
+                    ];
+
+                    if (!empty($bbbsessionstime)) {
+                        $ctr = 1;
+                        foreach ($bbbsessionstime as $bbbstarts) {
+                            $tableheaders2['time' . $ctr . 'i' . $instance->id] = new html_table_cell(date('d.m.Y H:m', $bbbstarts));
+                            $tableheaders2['time' . $ctr . 'i' . $instance->id]->header = true;
+                            $tablecolumns[] = 'time' . $ctr . 'i' . $instance->id;
+                            $table->colclasses['time' . $ctr . 'i' . $instance->id] = 'instance' . $instance->id . ' time' . $ctr;
+                            $ctr++;
                         }
-                        $row['i'. $ictr . 's' . $sctr] = new html_table_cell($text);
-                        $row['i'. $ictr . 's' . $sctr]->attributes['class'] = 'instance' . $instance->id . ' time' . ($sctr + 1);
-                        $sctr++;
                     }
                 }
-                $ictr++;
             }
 
-            $table->data[$userid] = new html_table_row();
-            $table->data[$userid]->cells = $row;
-        }
-        $performance->table_built = microtime(true);
+            $table->head = [];
+            $table->head[0] = new html_table_row();
+            $table->head[0]->cells = $tableheaders;
+            $table->head[1] = new html_table_row();
+            $table->head[1]->cells = $tableheaders2;
 
-        return $table;
+            foreach ($data as $userid => $curuser) {
+                $row = [];
+                $userurl = new moodle_url('/user/view.php', [
+                    'id' => $userid,
+                    'course' => $this->courseid
+                ]);
+
+                    $userlink = html_writer::link($userurl, fullname($curuser, has_capability('moodle/site:viewfullnames', $context)));
+                    $row['fullnameuser'] = new html_table_cell($userlink);
+                    $ictr = 1;
+                    foreach ($instances as $instance) {
+                        $bbbsessionstime = $this->get_session_time_for_instance($instance->id);
+                        $span = count($bbbsessionstime);
+                        if ($span > 0) {
+                            $sctr = 0;
+                            foreach ($bbbsessionstime as $session) {
+                                $text = get_string('yes');
+                                if ($participationdata['i'. $ictr. 's' . $sctr][$userid] == 0 ) {
+                                    $text = get_string('no');
+                                }
+                                $row['i'. $ictr . 's' . $sctr] = new html_table_cell($text);
+                                $row['i'. $ictr . 's' . $sctr]->attributes['class'] = 'instance' . $instance->id . ' time' . ($sctr + 1);
+                                $sctr++;
+                            }
+                        }
+                    $ictr++;
+            }
+
+                $table->data[$userid] = new html_table_row();
+                $table->data[$userid]->cells = $row;
+            }
+            $performance->table_built = microtime(true);
+
+            return $table;
     }
 
     /**
