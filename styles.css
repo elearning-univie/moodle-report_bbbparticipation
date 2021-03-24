@@ -68,16 +68,12 @@
     margin-left: 3px;
 }
 
-.path-report-bbbparticipation table.userview th.cell {
-    text-align: center;
-}
-
 .path-report-bbbparticipation table tr {
     white-space: nowrap;
 }
 
 .path-report-bbbparticipation table td {
-    text-align: center;
+    text-align: left;
 }
 
 .path-report-bbbparticipation table td.fullnameuser,

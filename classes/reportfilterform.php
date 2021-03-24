@@ -72,7 +72,6 @@ class report_bbbparticipation_reportfilterform extends moodleform {
                 get_string('modulenameplural', 'report_bbbparticipation'),
             $bbbselects, ['size' => 5]);
         $instances->setMultiple(true);
-        $mform->addRule('instances', get_string('required'), 'required', '', 'client');
 
         $mform->addElement('submit', 'submitbutton', get_string('update', 'report_bbbparticipation'));
         $mform->disable_form_change_checker();

@@ -288,6 +288,7 @@ class report_bbbparticipation_base {
      */
     public function init_hidden() {
         global $SESSION;
+
         $thide = optional_param('thide', null, PARAM_ALPHANUM);
         $tshow = optional_param('tshow', null, PARAM_ALPHANUM);
         if (!isset($SESSION->bbbparticipation)) {

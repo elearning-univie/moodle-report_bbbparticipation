@@ -32,7 +32,6 @@ defined('MOODLE_INTERNAL') || die();
  * Enhance Moodle's html_table with colgroups!
  *
  * @package   report_bbbparticipation
- * @package   report_bbbparticipation
  * @copyright 2021 University of Vienna
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

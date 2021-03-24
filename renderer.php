@@ -121,6 +121,7 @@ class report_bbbparticipation_renderer extends plugin_renderer_base {
      * @return string HTML code
      */
     protected function table(html_table $table, report_bbbparticipation_base $report = null) {
+        global $USER;
 
         if ($report == null) {
             $nohide = true;
@@ -404,15 +405,29 @@ class report_bbbparticipation_renderer extends plugin_renderer_base {
      * @return string HTML snippet
      */
     protected function get_toggle_links($column = '', $columnstring = '', report_bbbparticipation_base $report = null) {
+        global $USER;
         $html = '';
         if (empty($report)) {
             return '';
         }
+        $instances = $report->get_instances();
         $showicon = $this->output->pix_icon('t/switch_plus', get_string('show'));
         $hideicon = $this->output->pix_icon('t/switch_minus', get_string('hide'));
+        $url = new moodle_url($this->page->url);
+        if (!in_array(0, $instances)) {
+            $url->param('userid', $USER->id);
+            $url->param('sesskey', sesskey());
+            $url->param('_qf__report_bbbparticipation_reportfilterform', '1');
+            $url->param('instances', '_qf__force_multiselect_submission');
+            foreach ($instances as $inst) {
+                $url->param('instances[]', $inst);
+            }
+            $url->param('submitbutton', 'Update');
+        }
         if ($report->column_is_hidden($column)) {
             // Show link!
-            $html = html_writer::link(new moodle_url($this->page->url, ['tshow' => $column]),
+            $url->param('tshow', $column);
+            $html = html_writer::link($url,
                     $showicon,
                     [
                             'class' => $column . ' showcol',
@@ -421,7 +436,8 @@ class report_bbbparticipation_renderer extends plugin_renderer_base {
                     ]);
         } else {
             // Hide link!
-            $html = html_writer::link(new moodle_url($this->page->url, ['thide' => $column]),
+            $url->param('thide', $column);
+            $html = html_writer::link($url,
                     $hideicon,
                     [
                             'class' => $column . ' hidecol',
@@ -430,6 +446,7 @@ class report_bbbparticipation_renderer extends plugin_renderer_base {
                     ]);
         }
 
+    //print_object($html);
         return $html;
     }
 }
