@@ -234,6 +234,7 @@ class report_bbbparticipation_base {
         list($esql, $params) = get_enrolled_sql($context, 'report/bbbparticipation:students', 0);
 
         $ictr = 1;
+        $ctr = 1;
         foreach ($instances as $instance) {
             $params['bbbid'] = $instance->id;
             $bbbsessionstime = $this->get_session_time_for_instance($instance->id);
@@ -262,7 +263,8 @@ class report_bbbparticipation_base {
                     }
 
                     $attend = $DB->get_records_sql_menu($sql, $params);
-                    $data['i'. $ictr. 's' . $sctr] = $attend;
+                    $data['i'. $ictr. 's' . $ctr] = $attend;
+                    $ctr++;
                 }
             }
             $ictr++;

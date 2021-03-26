@@ -58,7 +58,7 @@ class report_bbbparticipation_renderer extends plugin_renderer_base {
         $out = html_writer::tag('div', $this->table($table, $report),
                 ['class' => 'scrollforced']);
 
-        return $this->output->container($out, 'submission', 'checkmarkreporttable');
+        return $this->output->container($out, 'submission', 'bbbparticipationtable');
     }
 
 
@@ -262,6 +262,7 @@ class report_bbbparticipation_renderer extends plugin_renderer_base {
                     $content = html_writer::tag('div', $heading->text,
                                     ['class' => 'content']) .
                             $this->get_toggle_links($key, $heading->text, $report);
+
                     $output .= html_writer::tag($tagtype, $content, $attributes) . "\n";
                     $idx++;
                 }
@@ -410,9 +411,9 @@ class report_bbbparticipation_renderer extends plugin_renderer_base {
         if (empty($report)) {
             return '';
         }
-        $instances = $report->get_instances();
-        $showicon = $this->output->pix_icon('t/switch_plus', get_string('show'));
-        $hideicon = $this->output->pix_icon('t/switch_minus', get_string('hide'));
+         $instances = $report->get_instances();
+         $showicon = $this->output->pix_icon('t/switch_plus', get_string('show'));
+         $hideicon = $this->output->pix_icon('t/switch_minus', get_string('hide'));
         $url = new moodle_url($this->page->url);
         if (!in_array(0, $instances)) {
             $url->param('userid', $USER->id);
@@ -446,7 +447,6 @@ class report_bbbparticipation_renderer extends plugin_renderer_base {
                     ]);
         }
 
-    //print_object($html);
         return $html;
     }
 }
