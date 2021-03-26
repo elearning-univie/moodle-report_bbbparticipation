@@ -112,7 +112,6 @@ class report_bbbparticipation_overview extends report_bbbparticipation_base impl
                     ];
 
                     if (!empty($bbbsessionstime)) {
-                        //$ctr = 1;
                         foreach ($bbbsessionstime as $bbbstarts) {
                             $tableheaders2['time' . $ctr . 'i' . $instance->id] = new html_table_cell(date('d.m.Y H:m', $bbbstarts));
                             $tableheaders2['time' . $ctr . 'i' . $instance->id]->header = true;
