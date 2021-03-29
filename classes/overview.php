@@ -145,7 +145,7 @@ class report_bbbparticipation_overview extends report_bbbparticipation_base impl
                         $span = count($bbbsessionstime);
                     if ($span > 0) {
                             $sctr = 0;
-                        foreach ($bbbsessionstime as $session) {
+                        foreach ($bbbsessionstime as $ses) {
                                 $text = get_string('yes');
                             if ($participationdata['i'. $ictr. 's' . $ctr][$userid] == 0 ) {
                                     $text = get_string('no');

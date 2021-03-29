@@ -42,21 +42,19 @@ class report_bbbparticipation_renderer extends plugin_renderer_base {
         // Render download links!
         $data = [
                 'id' => $report->get_courseid(),
-                'tab' => optional_param('tab', null, PARAM_ALPHANUM),
                 'sesskey' => sesskey(),
                 'format' => report_bbbparticipation_base::FORMAT_XLSX
         ];
-        $checkmarks = $report->get_instances();
-        /*         $tabletoolbar = html_writer::tag('div', $this->get_downloadlinks(['checkmarks' => $checkmarks], $data),
-                 ['class' => 'download']);
+
+/*         $bbbs = $report->get_instances();
+         $tabletoolbar = html_writer::tag('div', $this->get_downloadlinks(['bbbs' => $bbbs], $data),
+                  ['class' => 'download']);
          $tabletoolbar .= html_writer::tag('div', $this->get_reset_table_preferences_link($report));
-         $out = html_writer::tag('div', $tabletoolbar, ['class' => 'tabletoolbar']); */
+          $out = html_writer::tag('div', $tabletoolbar, ['class' => 'tabletoolbar']); */
         // Render the table!
         $table = $report->get_table();
-        /*         $out .= html_writer::tag('div', $this->table($table, $report),
-             ['class' => 'scrollforced']); */
         $out = html_writer::tag('div', $this->table($table, $report),
-                ['class' => 'scrollforced']);
+             ['class' => 'scrollforced']);
 
         return $this->output->container($out, 'submission', 'bbbparticipationtable');
     }
