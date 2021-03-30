@@ -48,10 +48,10 @@ class report_bbbparticipation_renderer extends plugin_renderer_base {
 
         /*$bbbs = $report->get_instances();
          $tabletoolbar = html_writer::tag('div', $this->get_downloadlinks(['bbbs' => $bbbs], $data),
-                  ['class' => 'download']); 
+                  ['class' => 'download']);
         $tabletoolbar .= html_writer::tag('div', $this->get_reset_table_preferences_link($report)); */
         $tabletoolbar = html_writer::tag('div', $this->get_reset_table_preferences_link($report));
-        $out = html_writer::tag('div', $tabletoolbar, ['class' => 'tabletoolbar']); 
+        $out = html_writer::tag('div', $tabletoolbar, ['class' => 'tabletoolbar']);
         // Render the table!
         $table = $report->get_table();
         $out .= html_writer::tag('div', $this->table($table, $report),
