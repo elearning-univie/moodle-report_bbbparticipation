@@ -48,12 +48,13 @@ class report_bbbparticipation_renderer extends plugin_renderer_base {
 
         /*$bbbs = $report->get_instances();
          $tabletoolbar = html_writer::tag('div', $this->get_downloadlinks(['bbbs' => $bbbs], $data),
-                  ['class' => 'download']);
-         $tabletoolbar .= html_writer::tag('div', $this->get_reset_table_preferences_link($report));
-          $out = html_writer::tag('div', $tabletoolbar, ['class' => 'tabletoolbar']); */
+                  ['class' => 'download']); 
+        $tabletoolbar .= html_writer::tag('div', $this->get_reset_table_preferences_link($report)); */
+        $tabletoolbar = html_writer::tag('div', $this->get_reset_table_preferences_link($report));
+        $out = html_writer::tag('div', $tabletoolbar, ['class' => 'tabletoolbar']); 
         // Render the table!
         $table = $report->get_table();
-        $out = html_writer::tag('div', $this->table($table, $report),
+        $out .= html_writer::tag('div', $this->table($table, $report),
              ['class' => 'scrollforced']);
 
         return $this->output->container($out, 'submission', 'bbbparticipationtable');
@@ -403,7 +404,7 @@ class report_bbbparticipation_renderer extends plugin_renderer_base {
      * @param report_bbbparticipation_base $report needed to determine if the column is hidden
      * @return string HTML snippet
      */
-    protected function get_toggle_links($column = '', $columnstring = '', report_bbbparticipation_base $report = null) {
+    protected function get_toggle_links($column = '', $columnstring = '', report_bbbparticipation_base $report) {
         global $USER;
         $html = '';
         if (empty($report)) {
