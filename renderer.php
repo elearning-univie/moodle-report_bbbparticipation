@@ -46,7 +46,7 @@ class report_bbbparticipation_renderer extends plugin_renderer_base {
                 'format' => report_bbbparticipation_base::FORMAT_XLSX
         ];
 
-/*         $bbbs = $report->get_instances();
+        /*$bbbs = $report->get_instances();
          $tabletoolbar = html_writer::tag('div', $this->get_downloadlinks(['bbbs' => $bbbs], $data),
                   ['class' => 'download']);
          $tabletoolbar .= html_writer::tag('div', $this->get_reset_table_preferences_link($report));

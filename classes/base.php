@@ -66,7 +66,7 @@ class report_bbbparticipation_base {
     public function __construct($id, $instances = [0]) {
         $this->courseid = $id;
         $this->instances = $instances;
-        $this->init_hidden();        
+        $this->init_hidden();
         $this->init_sortby();
     }
 
@@ -314,7 +314,7 @@ class report_bbbparticipation_base {
                 }
             }
         }
-        
+
     }
 
     /**
