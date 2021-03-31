@@ -25,8 +25,7 @@ Feature: As a teacher I want to view the BBB participation report
 
   @javascript
   Scenario: I can view the BBB participation report
-  And I click on "Actions menu" "link"
-  And I follow "More..."
-  And I click "BBB Participation"
-  Then I should see "BBB participation"
-  
+    And I click on "Actions menu" "link"
+    And I follow "More..."
+    And I click "BBB Participation"
+    Then I should see "BBB participation"
