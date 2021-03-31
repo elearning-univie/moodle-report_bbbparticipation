@@ -151,12 +151,12 @@ class report_bbbparticipation_base {
 
         if (!empty($userids)) {
             list($sqluserids, $userparams) = $DB->get_in_or_equal($userids, SQL_PARAMS_NAMED, 'user');
-    
+
             $sql = 'SELECT ' . $ufields . '
                       FROM {user} u
                      WHERE u.id ' . $sqluserids . '
                   GROUP BY u.id';
-    
+
             $data = $DB->get_records_sql($sql, $userparams);
             return $data;
         }
