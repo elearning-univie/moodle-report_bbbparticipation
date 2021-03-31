@@ -24,7 +24,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Base class for checkmarkreports with common logic and definitions
+ * Base class for bbbparticipation reports with common logic and definitions
  *
  * @package   report_bbbparticipation
  * @copyright 2021 University of Vienna
@@ -61,7 +61,7 @@ class report_bbbparticipation_base {
      * Base constructor
      *
      * @param int $id course id
-     * @param int[] $instances (optional) array of checkmark instances to include
+     * @param int[] $instances (optional) array of bbb instances to include
      */
     public function __construct($id, $instances = [0]) {
         $this->courseid = $id;
@@ -100,14 +100,13 @@ class report_bbbparticipation_base {
             }
         }
 
-        // Get all userdata in 1 query!
         $context = context_course::instance($course->id);
 
         // Get general data from users!
-        list($esql, $params) = get_enrolled_sql($context, 'mod/checkmark:submit', 0);
+        list($esql, $params) = get_enrolled_sql($context, 'report/bbbparticipation:students', 0);
 
         $sql = 'SELECT u.id FROM {user} u ' .
-                'LEFT JOIN (' . $esql . ') eu ON eu.id=u.id ' .
+            'LEFT JOIN (' . $esql . ') eu ON eu.id=u.id ' .
                 'WHERE u.deleted = 0 AND eu.id=u.id ';
         if (!empty($this->users) && !in_array(0, $this->users)) {
             list($insql, $inparams) = $DB->get_in_or_equal($this->users, SQL_PARAMS_NAMED, 'user');
@@ -129,14 +128,11 @@ class report_bbbparticipation_base {
      *
      * @param object $course (optional) course object
      * @param int|int[] $userids (optional) array of user ids to include
-     * @param int[] $instances (optional) array of checkmark ids to include
+     * @param int[] $instances (optional) array of bbbparticipation ids to include
      * @return object[]|null
      */
     public function get_user_data($course = null, $userids = 0, $instances = [0]) {
         global $DB, $COURSE, $SESSION;
-
-        // Construct the SQL!
-        $params = [];
 
         $ufields = user_picture::fields('u');
 
@@ -152,27 +148,25 @@ class report_bbbparticipation_base {
         if ($userids == 0) {
             $userids = get_enrolled_users($context, '', 0, 'u.*', 'lastname ASC');
         }
-        list($sqluserids, $userparams) = $DB->get_in_or_equal($userids, SQL_PARAMS_NAMED, 'user');
 
-        $sql = 'SELECT ' . $ufields . '
+        if (!empty($userids)) {
+            list($sqluserids, $userparams) = $DB->get_in_or_equal($userids, SQL_PARAMS_NAMED, 'user');
+    
+            $sql = 'SELECT ' . $ufields . '
                       FROM {user} u
                      WHERE u.id ' . $sqluserids . '
                   GROUP BY u.id';
-
-        $data = $DB->get_records_sql($sql, $userparams);
-
-        if (!empty($userids)) {
-
+    
+            $data = $DB->get_records_sql($sql, $userparams);
             return $data;
         }
-
         return null;
     }
 
     /**
      * Get all bbb instances in course indexed by bbb id
      *
-     * @return object[] associative array of checkmark instances indexed by checkmark ids
+     * @return object[] associative array of bbb instances indexed by bbbparticipation ids
      */
     public function get_courseinstances() {
         global $DB;
@@ -203,7 +197,7 @@ class report_bbbparticipation_base {
      *
      * @param int $bbbid
      *
-     * @return object[] associative array of checkmark instances indexed by checkmark ids
+     * @return object[] associative array of bbb instances indexed by bbbparticipation ids
      */
     public function get_session_time_for_instance(int $bbbid) {
         global $DB;
@@ -219,7 +213,7 @@ class report_bbbparticipation_base {
     }
 
     /**
-     * Get's the examples data for 1 user in 1 checkmark instance
+     * Get BBB session participation data
      *
      * @return array
      */
@@ -247,15 +241,17 @@ class report_bbbparticipation_base {
                         $inbetweensql = 'BETWEEN :start AND (:startnext -1)';
                         $params['startnext'] = $bbbsessionstime[$sctr + 1];
                     }
-                    $insql = "IF(u.id IN (
-                              SELECT DISTINCT(l.userid) FROM {bigbluebuttonbn_logs} l
+                    $insql = "    IF (u.id IN (
+                     SELECT DISTINCT (l.userid)
+                                FROM {bigbluebuttonbn_logs} l
                                WHERE l.bigbluebuttonbnid = :bbbid
                                  AND l.log  = 'Join'
-                                 AND l.timecreated " . $inbetweensql . "),
-                              '1','0') att";
-                    $sql = 'SELECT u.id, ' . $insql . ' FROM {user} u ' .
+                                 AND l.timecreated " . $inbetweensql . "),'1','0') att";
+
+                    $sql = 'SELECT u.id, ' . $insql . '
+                              FROM {user} u ' .
                         'LEFT JOIN (' . $esql . ') eu ON eu.id=u.id ' .
-                        'WHERE u.deleted = 0 AND eu.id=u.id ';
+                            'WHERE u.deleted = 0 AND eu.id=u.id ';
                     if (!empty($this->users) && !in_array(0, $this->users)) {
                         list($insql, $inparams) = $DB->get_in_or_equal($this->users, SQL_PARAMS_NAMED, 'user');
                         $sql .= ' AND u.id ' . $insql;
@@ -346,7 +342,7 @@ class report_bbbparticipation_base {
                 $SESSION->bbbparticipation->{$this->courseid}->sort = array_reverse($arr, true);
             } else {
                 switch ($tsort) {
-                    case 'checkmark':
+                    case 'bbbparticipation':
                         if ($arr[$tsort] == 'ASC') {
                             $arr[$tsort] = 'DESC';
                         } else {
@@ -386,13 +382,13 @@ class report_bbbparticipation_base {
         $sortarr = $SESSION->bbbparticipation->{$this->courseid}->sort;
         reset($sortarr);
         $primesort = key($sortarr);
-        if (($primesort == 'checkmark') && ($column != 'checkmark')) {
+        if (($primesort == 'bbbparticipation') && ($column != 'bbbparticipation')) {
             next($sortarr);
             $primesort = key($sortarr);
         }
         if (($column == $primesort)
-                || (($column == 'checkmark') && key_exists($column, $sortarr))) {
-            // We show only the first sortby column and checkmark!
+                || (($column == 'bbbparticipation') && key_exists($column, $sortarr))) {
+            // We show only the first sortby column and bbbparticipation!
             switch ($sortarr[$column]) {
                 case 'ASC':
                     $text .= $OUTPUT->pix_icon('t/up', get_string('desc'));

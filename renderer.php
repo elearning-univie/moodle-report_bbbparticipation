@@ -35,7 +35,7 @@ class report_bbbparticipation_renderer extends plugin_renderer_base {
     /**
      * Renders the overview report (big html table with all users and all instances - except of filtered ones)
      *
-     * @param report_bbbparticipation_overview $report The checkmarkreport to render.
+     * @param report_bbbparticipation_overview $report The bbbparticipationreport to render.
      * @return string HTML snippet
      */
     protected function render_report_bbbparticipation_overview(report_bbbparticipation_overview $report) {
@@ -70,7 +70,7 @@ class report_bbbparticipation_renderer extends plugin_renderer_base {
      */
     private function get_downloadlinks($arrays, $data) {
         $arrays = http_build_query($arrays);
-        $uri = new moodle_url('/local/checkmarkreport/download.php?' . $arrays, $data);
+        $uri = new moodle_url('/report/bbbparticipation/download.php?' . $arrays, $data);
         $downloadlinks = get_string('exportas', 'report_bbbparticipation');
         $downloadlinks .= html_writer::tag('span',
                 html_writer::link($uri, '.XLSX'),

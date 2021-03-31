@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Contains report_bbbparticipation_overview class, (handling checkmarkreport overview content)
+ * Contains report_bbbparticipation_overview class
  *
  * @package   report_bbbparticipation
  * @copyright  2021 University of Vienna
@@ -24,7 +24,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * report_bbbparticipation_overview class, handles checkmarkreport overview content and export
+ * report_bbbparticipation_overview class
  *
  * @package   report_bbbparticipation
  * @copyright  2021 University of Vienna
@@ -113,7 +113,8 @@ class report_bbbparticipation_overview extends report_bbbparticipation_base impl
 
                     if (!empty($bbbsessionstime)) {
                         foreach ($bbbsessionstime as $bbbstarts) {
-                            $tableheaders2['time' . $ctr . 'i' . $instance->id] = new html_table_cell(date('d.m.Y H:m', $bbbstarts));
+                            $datestring = date('d.m.Y', $bbbstarts) . "<br>" . date('H:m', $bbbstarts);
+                            $tableheaders2['time' . $ctr . 'i' . $instance->id] = new html_table_cell($datestring);
                             $tableheaders2['time' . $ctr . 'i' . $instance->id]->header = true;
                             $tablecolumns[] = 'time' . $ctr . 'i' . $instance->id;
                             $table->colclasses['time' . $ctr . 'i' . $instance->id] = 'instance' . $instance->id . ' time' . $ctr;

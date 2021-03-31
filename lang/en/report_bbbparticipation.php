@@ -23,6 +23,8 @@
  */
 
 $string['allbbbs'] = 'All BBBs';
+$string['bbbparticipation:students'] = 'BBB particioation report students';
+$string['bbbparticipation:view'] = 'View BBB participation report';
 $string['bbbparticipationreport'] = 'BBB participation report';
 $string['exportas'] = 'Export as';
 $string['modulenameplural'] = 'BBBs';
