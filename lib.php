@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version info
+ * This file contains functions used by the participation report
  *
  * @package   report_bbbparticipation
  * @copyright  2021 University of Vienna
@@ -24,8 +24,17 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$plugin->version   = 2021033000;             // The current plugin version (Date: YYYYMMDDXX)
-$plugin->requires  = 2020061501;             // Requires this Moodle version
-$plugin->component = 'report_bbbparticipation'; // Full name of the plugin (used for diagnostics)
-$plugin->maturity = MATURITY_STABLE;
-$plugin->dependencies = array('mod_bigbluebuttonbn' => 2021030500);
+/**
+ * This function extends the navigation with the report items
+ *
+ * @param navigation_node $navigation The navigation node to extend
+ * @param stdClass $course The course to object for the report
+ * @param stdClass $context The context of the course
+ */
+function report_bbbparticipation_extend_navigation_course($navigation, $course, $context) {
+    if (has_capability('report/bbbparticipation:view', $context)) {
+        $url = new moodle_url('/report/bbbparticipation/index.php', array('id' => $course->id));
+        $navigation->add(get_string('pluginname', 'report_bbbparticipation'), $url, navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
+    }
+}
+

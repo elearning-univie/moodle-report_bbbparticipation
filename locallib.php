@@ -15,17 +15,24 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version info
+ * This file contains functions used by the participation reports
  *
  * @package   report_bbbparticipation
- * @copyright  2021 University of Vienna
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @copyright 2021 University of Vienna
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die;
+defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2021033000;             // The current plugin version (Date: YYYYMMDDXX)
-$plugin->requires  = 2020061501;             // Requires this Moodle version
-$plugin->component = 'report_bbbparticipation'; // Full name of the plugin (used for diagnostics)
-$plugin->maturity = MATURITY_STABLE;
-$plugin->dependencies = array('mod_bigbluebuttonbn' => 2021030500);
+/**
+ * Returns list of all BBB activities in this course
+ *
+ * @param int $courseid
+ * @return array
+ */
+function report_bbbparticipation_get_bbb_activities_for_course(int $courseid) {
+    global $DB;
+
+    $bbblist = $DB->get_records('bigbluebuttonbn', ['course' => $courseid]);
+    return $bbblist;
+}

@@ -15,17 +15,36 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version info
+ * Capabilities
  *
- * @package   report_bbbparticipation
+ * @package    report_bbbparticipation
  * @copyright  2021 University of Vienna
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die;
+defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2021033000;             // The current plugin version (Date: YYYYMMDDXX)
-$plugin->requires  = 2020061501;             // Requires this Moodle version
-$plugin->component = 'report_bbbparticipation'; // Full name of the plugin (used for diagnostics)
-$plugin->maturity = MATURITY_STABLE;
-$plugin->dependencies = array('mod_bigbluebuttonbn' => 2021030500);
+$capabilities = array(
+
+    'report/bbbparticipation:students' => array(
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_MODULE,
+        'archetypes' => array(
+            'student' => CAP_ALLOW
+        )
+    ),
+    'report/bbbparticipation:view' => array(
+        'riskbitmask' => RISK_PERSONAL,
+        'captype' => 'read',
+        'contextlevel' => CONTEXT_COURSE,
+        'archetypes' => array(
+            'teacher' => CAP_ALLOW,
+            'editingteacher' => CAP_ALLOW,
+            'manager' => CAP_ALLOW
+        ),
+
+        'clonepermissionsfrom' => 'coursereport/bbbparticipation:view',
+    )
+);
+
+

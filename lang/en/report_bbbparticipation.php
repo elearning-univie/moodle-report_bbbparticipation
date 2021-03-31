@@ -17,11 +17,17 @@
 /**
  * Lang strings
  *
- * @package    report
- * @subpackage bbbparticipation
+ * @package   report_bbbparticipation
  * @copyright  2021 University of Vienna
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+$string['allbbbs'] = 'All BBBs';
+$string['bbbparticipation:students'] = 'BBB particioation report students';
+$string['bbbparticipation:view'] = 'View BBB participation report';
+$string['bbbparticipationreport'] = 'BBB participation report';
+$string['exportas'] = 'Export as';
+$string['modulenameplural'] = 'BBBs';
 $string['pluginname'] = 'BBB participation';
 $string['privacy:metadata'] = 'The BBB participation plugin does not store any personal data.';
+$string['update'] = 'Update';
