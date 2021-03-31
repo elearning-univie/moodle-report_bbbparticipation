@@ -16,12 +16,11 @@ Feature: As a teacher I want to view the BBB participation report
       | teacher | C1     | editingteacher |
       | student1 | C1    | student        |
       | student2 | C1    | student        |
-    And the following "activities" exist:
-      | activity        | name | intro            | course | idnumber         | type | recordings_imported |
-      | bigbluebuttonbn | BBB1 | BBB1 description | C1     | bigbluebuttonbn1 | 0    | 0                   |
-      | bigbluebuttonbn | BBB2 | BBB2 description | C1     | bigbluebuttonbn2 | 0    | 0                   |
     And I log in as "teacher"
-    And I am on "Course 1" course homepage
+    And I am on "Course 1" course homepage with editing mode on
+    And I add a "BigBlueButtonBN" to section "1" and I fill the form with:
+      | Instance type | Room/Activity with Recordings |
+      | Virtual classroom name | BBB1 |
 
   @javascript
   Scenario: I can view the BBB participation report
