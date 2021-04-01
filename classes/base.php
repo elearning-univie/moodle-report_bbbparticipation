@@ -107,7 +107,7 @@ class report_bbbparticipation_base {
 
         $sql = 'SELECT u.id FROM {user} u ' .
             'LEFT JOIN (' . $esql . ') eu ON eu.id=u.id ' .
-            'WHERE u.deleted = 0 AND eu.id=u.id ';
+                'WHERE u.deleted = 0 AND eu.id=u.id ';
         if (!empty($this->users) && !in_array(0, $this->users)) {
             list($insql, $inparams) = $DB->get_in_or_equal($this->users, SQL_PARAMS_NAMED, 'user');
             $sql .= ' AND u.id ' . $insql;
@@ -270,7 +270,7 @@ class report_bbbparticipation_base {
                     $sql = 'SELECT u.id, ' . $insql .
                             ' FROM {user} u ' .
                         'LEFT JOIN (' . $esql . ') eu ON eu.id=u.id ' .
-                        'WHERE u.deleted = 0 AND eu.id=u.id ';
+                            'WHERE u.deleted = 0 AND eu.id=u.id ';
                     if (!empty($this->users) && !in_array(0, $this->users)) {
                         list($insql, $inparams) = $DB->get_in_or_equal($this->users, SQL_PARAMS_NAMED, 'user');
                         $sql .= ' AND u.id ' . $insql;
