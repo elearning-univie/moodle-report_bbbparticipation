@@ -85,7 +85,7 @@ class report_bbbparticipation_base {
      * @return object[]
      */
     public function get_coursedata() {
-        global $DB, $SESSION;
+        global $DB;
 
         $course = $DB->get_record('course', ['id' => $this->courseid], '*', MUST_EXIST);
 
@@ -237,7 +237,7 @@ class report_bbbparticipation_base {
      * @return array
      */
     public function get_participation_data() {
-        global $DB, $SESSION;
+        global $DB;
         $data[] = [];
         $instances = $this->get_courseinstances();
 
@@ -397,7 +397,7 @@ class report_bbbparticipation_base {
      */
     public function get_sortlink($column, $text, $url) {
         global $SESSION, $OUTPUT;
-        $url = $this->get_full_url($url);
+        $url = $this->get_url_with_selected_instances($url);
         // Sortarray has to be initialized!
         $sortarr = $SESSION->bbbparticipation->{$this->courseid}->sort;
         reset($sortarr);
@@ -430,7 +430,7 @@ class report_bbbparticipation_base {
      * @param string|moodle_url $url the base url for all links
      * @return moodle_url
      */
-    public function get_full_url($url) {
+    public function get_url_with_selected_instances($url) {
         global $USER;
         $instances = $this->get_instances();
         if (!in_array(0, $instances)) {
