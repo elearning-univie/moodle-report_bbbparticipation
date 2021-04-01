@@ -163,7 +163,7 @@ class report_bbbparticipation_base {
                 $sort .= 'u.' . $field . ' ' . $direction;
             }
         }
-        
+
         if (!empty($sort)) {
             $sort = ' ORDER BY ' . $sort;
         }
@@ -397,7 +397,7 @@ class report_bbbparticipation_base {
      */
     public function get_sortlink($column, $text, $url) {
         global $SESSION, $OUTPUT;
-        $url =$this->get_full_url($url);
+        $url = $this->get_full_url($url);
         // Sortarray has to be initialized!
         $sortarr = $SESSION->bbbparticipation->{$this->courseid}->sort;
         reset($sortarr);
@@ -405,8 +405,7 @@ class report_bbbparticipation_base {
         if (($primesort == 'bbbparticipation') && ($column != 'bbbparticipation')) {
             next($sortarr);
             $primesort = key($sortarr);
-        }
-        //|| (($column == 'bbbparticipation') && key_exists($column, $sortarr))
+
         if (($column == $primesort)
                 ) {
             // We show only the first sortby column and bbbparticipation!
@@ -443,7 +442,7 @@ class report_bbbparticipation_base {
             }
             $url->param('submitbutton', 'Update');
         }
-        
+
         return $url;
     }
     /**

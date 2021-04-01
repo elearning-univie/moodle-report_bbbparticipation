@@ -61,8 +61,6 @@ class report_bbbparticipation_overview extends report_bbbparticipation_base impl
         $data = $this->get_coursedata();
         $participationdata = $this->get_participation_data();
         $performance->datafetched = microtime(true);
-//print_object($data);
-//print_object($participationdata);
         $table = new \report_bbbparticipation\html_table_colgroups();
 
         $table->id = 'user-participation';
@@ -82,7 +80,6 @@ class report_bbbparticipation_overview extends report_bbbparticipation_base impl
 
             $tableheaders['fullnameuser']->header = true;
             $tableheaders['fullnameuser']->rowspan = 2;
-//             $tableheaders['fullnameuser']->attributes['class'] = '';
             $tableheaders2['fullnameuser'] = null;
             $tablecolumns[] = 'fullnameuser';
             $table->colgroups[] = [
@@ -117,8 +114,7 @@ class report_bbbparticipation_overview extends report_bbbparticipation_base impl
 
                     if (!empty($bbbsessionstime)) {
                         foreach ($bbbsessionstime as $bbbstarts) {
-                            //$datestring = date('d.m.Y', $bbbstarts) . "<br>" . date('H:m', $bbbstarts);
-                            $datestring = userdate($bbbstarts, get_string('strftimedatemonthabbr', 'langconfig')) . "<br>" . 
+                            $datestring = userdate($bbbstarts, get_string('strftimedatemonthabbr', 'langconfig')) . "<br>" .
                                           userdate($bbbstarts, get_string('strftimetime24', 'langconfig'));
                             $tableheaders2['time' . $ctr . 'i' . $instance->id] = new html_table_cell($datestring);
                             $tableheaders2['time' . $ctr . 'i' . $instance->id]->header = true;
