@@ -18,7 +18,7 @@ Feature: As a teacher I want to view the BBB participation report
       | student2 | C1    | student        |
     And I log in as "teacher"
     And I am on "Course 1" course homepage with editing mode on
-    And I add a "BigBlueButtonBN" to section "1" and I fill the form with:
+    And I add "BigBlueButtonBN" to section "1" and I fill the form with:
       | Instance type | Room/Activity with Recordings |
       | Virtual classroom name | BBB1 |
 
