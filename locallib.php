@@ -33,6 +33,6 @@ defined('MOODLE_INTERNAL') || die();
 function report_bbbparticipation_get_bbb_activities_for_course(int $courseid) {
     global $DB;
 
-    $bbblist = $DB->get_records('bigbluebuttonbn', ['course' => $courseid]);
+    $bbblist = $DB->get_records('bigbluebuttonbn', ['course' => $courseid], 'id');
     return $bbblist;
 }

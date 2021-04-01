@@ -61,7 +61,6 @@ class report_bbbparticipation_overview extends report_bbbparticipation_base impl
         $data = $this->get_coursedata();
         $participationdata = $this->get_participation_data();
         $performance->datafetched = microtime(true);
-
         $table = new \report_bbbparticipation\html_table_colgroups();
 
         $table->id = 'user-participation';
@@ -96,7 +95,9 @@ class report_bbbparticipation_overview extends report_bbbparticipation_base impl
                 $bbbsessionstime = $this->get_session_time_for_instance($instance->id);
                 $span = count($bbbsessionstime);
                 if ($span > 0) {
-                    $tableheaders['instance' . $instance->id] = new html_table_cell($instance->name);
+                    $instanceurl = new moodle_url('/mod/bigbluebuttonbn/view.php', ['id' => $instance->coursemodule]);
+                    $instancelink = html_writer::link($instanceurl, $instance->name, ['target' => '_blank']);
+                    $tableheaders['instance' . $instance->id] = new html_table_cell($instancelink);
                     $tableheaders['instance' . $instance->id]->header = true;
                     $tableheaders['instance' . $instance->id]->scope = 'colgroup';
                     $table->colclasses['instance' . $instance->id] = 'instance' . $instance->id;
@@ -113,7 +114,8 @@ class report_bbbparticipation_overview extends report_bbbparticipation_base impl
 
                     if (!empty($bbbsessionstime)) {
                         foreach ($bbbsessionstime as $bbbstarts) {
-                            $datestring = date('d.m.Y', $bbbstarts) . "<br>" . date('H:m', $bbbstarts);
+                            $datestring = userdate($bbbstarts, get_string('strftimedatemonthabbr', 'langconfig')) . "<br>" .
+                                          userdate($bbbstarts, get_string('strftimetime24', 'langconfig'));
                             $tableheaders2['time' . $ctr . 'i' . $instance->id] = new html_table_cell($datestring);
                             $tableheaders2['time' . $ctr . 'i' . $instance->id]->header = true;
                             $tablecolumns[] = 'time' . $ctr . 'i' . $instance->id;
