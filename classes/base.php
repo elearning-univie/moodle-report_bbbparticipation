@@ -405,7 +405,7 @@ class report_bbbparticipation_base {
         if (($primesort == 'bbbparticipation') && ($column != 'bbbparticipation')) {
             next($sortarr);
             $primesort = key($sortarr);
-
+        }
         if (($column == $primesort)
                 ) {
             // We show only the first sortby column and bbbparticipation!
@@ -423,6 +423,7 @@ class report_bbbparticipation_base {
 
         return $sortlink;
     }
+
     /**
      * Get link with selected instances
      *
