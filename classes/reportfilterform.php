@@ -56,7 +56,7 @@ class report_bbbparticipation_reportfilterform extends moodleform {
      * Definition of filter form
      */
     protected function definition() {
-        global $COURSE, $DB, $USER, $OUTPUT;
+        global $COURSE, $USER;
         $mform = $this->_form;
 
         $mform->addElement('header', 'bbbparticipation', get_string('pluginname', 'report_bbbparticipation'));

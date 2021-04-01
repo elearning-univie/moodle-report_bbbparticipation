@@ -62,6 +62,7 @@
 .path-report-bbbparticipation table .hiddencol {
     margin: 0;
     padding: 0;
+    width: 0;
 }
 
 .path-report-bbbparticipation table .hidecol {
@@ -76,11 +77,15 @@
     text-align: left;
 }
 
-.path-report-bbbparticipation table td.fullnameuser,
-.path-report-bbbparticipation table td.email {
+.path-report-bbbparticipation table td.fullnameuser{
     text-align: left;
+    width: 15%;
 }
 
+.path-report-bbbparticipation table th.fullnameuser{
+    text-align: left;
+    width: 15%;
+}
 .path-report-bbbparticipation .overview .current,
 .path-report-bbbparticipation .useroverview .current {
     background: #f3e4c0;

@@ -69,6 +69,7 @@ $customdata = [
     'courseid' => $id,
     'hideusers' => true
 ];
+
 $mform = new report_bbbparticipation_reportfilterform($PAGE->url, $customdata, 'get');
 if ($data = $mform->get_data()) {
     $instances = $data->instances;

@@ -85,7 +85,7 @@ class report_bbbparticipation_base {
      * @return object[]
      */
     public function get_coursedata() {
-        global $DB;
+        global $DB, $SESSION;
 
         $course = $DB->get_record('course', ['id' => $this->courseid], '*', MUST_EXIST);
 
@@ -107,7 +107,7 @@ class report_bbbparticipation_base {
 
         $sql = 'SELECT u.id FROM {user} u ' .
             'LEFT JOIN (' . $esql . ') eu ON eu.id=u.id ' .
-                'WHERE u.deleted = 0 AND eu.id=u.id ';
+            'WHERE u.deleted = 0 AND eu.id=u.id ';
         if (!empty($this->users) && !in_array(0, $this->users)) {
             list($insql, $inparams) = $DB->get_in_or_equal($this->users, SQL_PARAMS_NAMED, 'user');
             $sql .= ' AND u.id ' . $insql;
@@ -149,13 +149,32 @@ class report_bbbparticipation_base {
             $userids = get_enrolled_users($context, '', 0, 'u.*', 'lastname ASC');
         }
 
+        $sortable = [
+            'firstname',
+            'lastname'
+        ];
+        $sortarr = $SESSION->bbbparticipation->{$this->courseid}->sort;
+        $sort = '';
+        foreach ($sortarr as $field => $direction) {
+            if (in_array($field, $sortable)) {
+                if (!empty($sort)) {
+                    $sort .= ', ';
+                }
+                $sort .= 'u.' . $field . ' ' . $direction;
+            }
+        }
+        
+        if (!empty($sort)) {
+            $sort = ' ORDER BY ' . $sort;
+        }
+
         if (!empty($userids)) {
             list($sqluserids, $userparams) = $DB->get_in_or_equal($userids, SQL_PARAMS_NAMED, 'user');
 
             $sql = 'SELECT ' . $ufields . '
                       FROM {user} u
                      WHERE u.id ' . $sqluserids . '
-                  GROUP BY u.id';
+                  GROUP BY u.id ' . $sort;
 
             $data = $DB->get_records_sql($sql, $userparams);
             return $data;
@@ -218,7 +237,7 @@ class report_bbbparticipation_base {
      * @return array
      */
     public function get_participation_data() {
-        global $DB;
+        global $DB, $SESSION;
         $data[] = [];
         $instances = $this->get_courseinstances();
 
@@ -248,10 +267,10 @@ class report_bbbparticipation_base {
                                  AND l.log  = 'Join'
                                  AND l.timecreated " . $inbetweensql . "),'1','0') att";
 
-                    $sql = 'SELECT u.id, ' . $insql . '
-                              FROM {user} u ' .
+                    $sql = 'SELECT u.id, ' . $insql .
+                            ' FROM {user} u ' .
                         'LEFT JOIN (' . $esql . ') eu ON eu.id=u.id ' .
-                            'WHERE u.deleted = 0 AND eu.id=u.id ';
+                        'WHERE u.deleted = 0 AND eu.id=u.id ';
                     if (!empty($this->users) && !in_array(0, $this->users)) {
                         list($insql, $inparams) = $DB->get_in_or_equal($this->users, SQL_PARAMS_NAMED, 'user');
                         $sql .= ' AND u.id ' . $insql;
@@ -378,6 +397,7 @@ class report_bbbparticipation_base {
      */
     public function get_sortlink($column, $text, $url) {
         global $SESSION, $OUTPUT;
+        $url =$this->get_full_url($url);
         // Sortarray has to be initialized!
         $sortarr = $SESSION->bbbparticipation->{$this->courseid}->sort;
         reset($sortarr);
@@ -386,8 +406,9 @@ class report_bbbparticipation_base {
             next($sortarr);
             $primesort = key($sortarr);
         }
+        //|| (($column == 'bbbparticipation') && key_exists($column, $sortarr))
         if (($column == $primesort)
-                || (($column == 'bbbparticipation') && key_exists($column, $sortarr))) {
+                ) {
             // We show only the first sortby column and bbbparticipation!
             switch ($sortarr[$column]) {
                 case 'ASC':
@@ -403,7 +424,28 @@ class report_bbbparticipation_base {
 
         return $sortlink;
     }
-
+    /**
+     * Get link with selected instances
+     *
+     * @param string|moodle_url $url the base url for all links
+     * @return moodle_url
+     */
+    public function get_full_url($url) {
+        global $USER;
+        $instances = $this->get_instances();
+        if (!in_array(0, $instances)) {
+            $url->param('userid', $USER->id);
+            $url->param('sesskey', sesskey());
+            $url->param('_qf__report_bbbparticipation_reportfilterform', '1');
+            $url->param('instances', '_qf__force_multiselect_submission');
+            foreach ($instances as $inst) {
+                $url->param('instances[]', $inst);
+            }
+            $url->param('submitbutton', 'Update');
+        }
+        
+        return $url;
+    }
     /**
      * Checks if a column is currently hidden
      *
