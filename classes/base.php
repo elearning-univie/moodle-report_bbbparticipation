@@ -151,7 +151,8 @@ class report_bbbparticipation_base {
 
         $sortable = [
             'firstname',
-            'lastname'
+            'lastname',
+            'alternatename'
         ];
         $sortarr = $SESSION->bbbparticipation->{$this->courseid}->sort;
         $sort = '';
