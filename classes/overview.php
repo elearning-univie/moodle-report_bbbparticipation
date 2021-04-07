@@ -52,7 +52,7 @@ class report_bbbparticipation_overview extends report_bbbparticipation_base impl
      * @return html_table report as html_table object
      */
     public function get_table($forexport = false) {
-        global $DB, $PAGE;
+        global $DB, $PAGE, $OUTPUT;
 
         $context = context_course::instance($this->courseid);
 
@@ -149,11 +149,17 @@ class report_bbbparticipation_overview extends report_bbbparticipation_base impl
                     if ($span > 0) {
                             $sctr = 0;
                         foreach ($bbbsessionstime as $ses) {
-                                $text = get_string('yes');
+                                //$text = get_string('yes');
+                            $text = $OUTPUT->pix_icon('t/check', get_string('yes'));
                             if ($participationdata['i'. $ictr. 's' . $ctr][$userid] == 0 ) {
-                                    $text = get_string('no');
+                                $text = $OUTPUT->pix_icon('e/cancel', get_string('no'));;
                             }
                             $row['time' . $ctr . 'i' . $instance->id] = new html_table_cell($text);
+                            if ($participationdata['i'. $ictr. 's' . $ctr][$userid] == 0 ) {
+                                $row['time' . $ctr . 'i' . $instance->id]->style = 'color: red';
+                            } else {
+                                $row['time' . $ctr . 'i' . $instance->id]->style = 'color: green';
+                            }
                             $sctr++;
                             $ctr++;
                         }
