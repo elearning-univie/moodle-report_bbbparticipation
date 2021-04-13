@@ -610,7 +610,6 @@ class report_bbbparticipation_base {
 
         foreach ($table->data as $drow) {
             foreach ($drow->cells as $idx => $cell) {
-                print_object($cell->text);
                 if ($idx === 'fullnameuser') {
                     preg_match('/">(.*?)<\/a>/s', $cell->text, $matches);
                     $content .= $matches[1] . $sep;
@@ -631,7 +630,6 @@ class report_bbbparticipation_base {
         echo $filecontent;
         die();
     }
-    
 
     /**
      * Prepare a worksheet for writing the table data

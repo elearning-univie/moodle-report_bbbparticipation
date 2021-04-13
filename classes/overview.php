@@ -215,7 +215,6 @@ class report_bbbparticipation_overview extends report_bbbparticipation_base impl
                 // Convert array rows to html_table_rows and cell strings to html_table_cell objects!
                 if (!($row instanceof html_table_row)) {
                     $newrow = new html_table_row();
-                    
                     foreach ($row as $cell) {
                         if (!($cell instanceof html_table_cell)) {
                             $cell = new html_table_cell($cell);

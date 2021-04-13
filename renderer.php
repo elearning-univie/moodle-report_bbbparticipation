@@ -49,8 +49,7 @@ class report_bbbparticipation_renderer extends plugin_renderer_base {
         $bbbs = $report->get_instances();
         $tabletoolbar = html_writer::tag('div', $this->get_downloadlinks(['bbbs' => $bbbs], $data),
                   ['class' => 'download']);
-        $tabletoolbar .= html_writer::tag('div', $this->get_reset_table_preferences_link($report)); 
-        //$tabletoolbar = html_writer::tag('div', $this->get_reset_table_preferences_link($report));
+        $tabletoolbar .= html_writer::tag('div', $this->get_reset_table_preferences_link($report));
         $out = html_writer::tag('div', $tabletoolbar, ['class' => 'tabletoolbar']);
         // Render the table!
         $table = $report->get_table();
@@ -116,7 +115,7 @@ class report_bbbparticipation_renderer extends plugin_renderer_base {
      * @return string HTML code
      */
     protected function table(html_table $table, report_bbbparticipation_base $report = null) {
-        global $COURSE, $OUTPUT;
+        global $COURSE;
 
         if ($report == null) {
             $nohide = true;
@@ -212,8 +211,8 @@ class report_bbbparticipation_renderer extends plugin_renderer_base {
                              $context), false, $sortable);
                         $heading->text = $fullnamestr;
                     }
-                    if (strpos($key, 'instance') !== false && $heading->id != null){
-                        $instanceurl = new moodle_url('/mod/bigbluebuttonbn/view.php', ['id' =>  $heading->id]);
+                    if (strpos($key, 'instance') !== false && $heading->id != null) {
+                        $instanceurl = new moodle_url('/mod/bigbluebuttonbn/view.php', ['id' => $heading->id]);
                         $instancelink = html_writer::link($instanceurl, $heading->text, ['target' => '_blank']);
                         $heading->text = $instancelink;
                     }
@@ -295,7 +294,6 @@ class report_bbbparticipation_renderer extends plugin_renderer_base {
             $output .= html_writer::start_tag('tbody', []);
 
             foreach ($table->data as $key => $row) {
-//                print_object($row);
                 if (($row === 'hr') && ($countcols)) {
                     $output .= html_writer::start_tag('tr') .
                             html_writer::tag('td', html_writer::tag('div', '',
@@ -393,10 +391,10 @@ class report_bbbparticipation_renderer extends plugin_renderer_base {
                         }
                         $content = html_writer::tag('div', $cell->text, ['class' => 'content']);
                         if ($cell->text == '1') {
-                            $content = html_writer::tag('div', $OUTPUT->pix_icon('t/check', get_string('yes')),
+                            $content = html_writer::tag('div', $this->output->pix_icon('t/check', get_string('yes')),
                                 ['class' => 'content', 'style' => 'color: green']);
-                        } else if ($cell->text == '0'){
-                            $content = html_writer::tag('div', $OUTPUT->pix_icon('e/cancel', get_string('no')),
+                        } else if ($cell->text == '0') {
+                            $content = html_writer::tag('div', $this->output->pix_icon('e/cancel', get_string('no')),
                                 ['class' => 'content', 'style' => 'color: red']);
                         }
                         $output .= html_writer::tag($tagtype, $content, $tdattributes) . "\n";
