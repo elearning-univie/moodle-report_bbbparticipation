@@ -181,7 +181,7 @@ class report_bbbparticipation_renderer extends plugin_renderer_base {
                 'cellpadding' => $table->cellpadding,
                 'cellspacing' => $table->cellspacing
         ]);
-        $output = html_writer::start_tag('table', $attributes) . "\n";
+        $output = html_writer::start_tag('table', $attributes);
 
         $countcols = 0;
 
@@ -196,10 +196,10 @@ class report_bbbparticipation_renderer extends plugin_renderer_base {
 
         if (!empty($table->head)) {
 
-            $output .= html_writer::start_tag('thead', []) . "\n";
+            $output .= html_writer::start_tag('thead', []);
 
             foreach ($table->head as $headrow) {
-                $output .= html_writer::start_tag('tr', []) . "\n";
+                $output .= html_writer::start_tag('tr', []);
                 $keys = array_keys($headrow->cells);
                 $lastkey = end($keys);
                 $countcols = count($headrow->cells);
@@ -269,12 +269,12 @@ class report_bbbparticipation_renderer extends plugin_renderer_base {
                                     ['class' => 'content']) .
                             $this->get_toggle_links($key, $heading->text, $report);
 
-                    $output .= html_writer::tag($tagtype, $content, $attributes) . "\n";
+                    $output .= html_writer::tag($tagtype, $content, $attributes);
                     $idx++;
                 }
-                $output .= html_writer::end_tag('tr') . "\n";
+                $output .= html_writer::end_tag('tr');
             }
-            $output .= html_writer::end_tag('thead') . "\n";
+            $output .= html_writer::end_tag('thead');
 
             if (empty($table->data)) {
                 /*
@@ -299,7 +299,7 @@ class report_bbbparticipation_renderer extends plugin_renderer_base {
                             html_writer::tag('td', html_writer::tag('div', '',
                                     ['class' => 'tabledivider']),
                                     ['colspan' => $countcols]) .
-                            html_writer::end_tag('tr') . "\n";;
+                            html_writer::end_tag('tr');;
                 } else {
                     $idx = 0;
                     // Convert array rows to html_table_rows and cell strings to html_table_cell objects!
@@ -329,7 +329,7 @@ class report_bbbparticipation_renderer extends plugin_renderer_base {
                                     'class' => trim($row->attributes['class']),
                                     'style' => $row->style,
                                     'id' => $row->id
-                            ]) . "\n";
+                            ]);
                     $keys2 = array_keys($row->cells);
                     $lastkey = end($keys2);
 
@@ -397,15 +397,15 @@ class report_bbbparticipation_renderer extends plugin_renderer_base {
                             $content = html_writer::tag('div', $this->output->pix_icon('e/cancel', get_string('no')),
                                 ['class' => 'content', 'style' => 'color: red']);
                         }
-                        $output .= html_writer::tag($tagtype, $content, $tdattributes) . "\n";
+                        $output .= html_writer::tag($tagtype, $content, $tdattributes);
                         $idx++;
                     }
                 }
-                $output .= html_writer::end_tag('tr') . "\n";
+                $output .= html_writer::end_tag('tr');
             }
-            $output .= html_writer::end_tag('tbody') . "\n";
+            $output .= html_writer::end_tag('tbody');
         }
-        $output .= html_writer::end_tag('table') . "\n";
+        $output .= html_writer::end_tag('table');
 
         return $output;
     }
