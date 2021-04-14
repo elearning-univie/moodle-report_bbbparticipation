@@ -1,6 +1,6 @@
 @report @report_bbbparticipation
 
-Feature: As a teacher I want to view the BBB participation report
+Feature: As a teacher I want to download the BBB participation report
 
   Background:
     Given the following "users" exist:
