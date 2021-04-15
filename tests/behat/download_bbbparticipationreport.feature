@@ -30,3 +30,4 @@ Feature: As a teacher I want to download the BBB participation report
     And I see "BBB participation"
     And I click on ".CSV" "link"
     Then I should see response status code "200"
+
