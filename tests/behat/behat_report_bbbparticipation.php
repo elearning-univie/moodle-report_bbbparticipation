@@ -43,15 +43,14 @@ class behat_report_bbbparticipation extends behat_base {
             throw new \Moodle\BehatExtension\Exception\SkippedException;
         }
     }
+
     /**
      * @Then /^I should see response status code "([^"]*)"$/
      */
-    public function iShouldSeeResponseStatusCode($statusCode)
-    {
-        $responseStatusCode = $this->response->getStatusCode();
-        
-        if (!$responseStatusCode == intval($statusCode)) {
-            throw new \Exception(sprintf("Did not see response status code %s, but %s.", $statusCode, $responseStatusCode));
+    public function ishouldseeresponsertatuscode($statuscode) {
+        $responsestatuscode = $this->response->getStatusCode();
+        if (!$responsectatuscode == intval($statuscode)) {
+            throw new \Exception(sprintf("Did not see response status code %s, but %s.", $statuscode, $responsectatuscode));
         }
     }
 
