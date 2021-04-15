@@ -43,8 +43,6 @@ class report_bbbparticipation_base {
     const FORMAT_ODS = 2;
     /** csv format */
     const FORMAT_CSV = 3;
-    /** plain text file format */
-    const FORMAT_TXT = 4;
     /** show all columns */
     const SHOW_ALL_COLUMNS = 'all';
 

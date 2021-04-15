@@ -28,4 +28,5 @@ Feature: As a teacher I want to download the BBB participation report
     And I click on "More..." "link"
     And I click on "BBB participation" "link"
     And I see "BBB participation"
-    And following ".CSV" should download between "1" and "144000" bytes
+    And I click on ".CSV" "link"
+    Then I should see response status code "200"
