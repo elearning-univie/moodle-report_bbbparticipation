@@ -21,7 +21,7 @@
  * @copyright  2021 University of Vienna
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
+require_once(__DIR__ . '/../../../../lib/behat/behat_base.php');
 /**
  * Steps definitions related with the bbbaprticipation.
  *
@@ -37,10 +37,10 @@ class behat_report_bbbparticipation extends behat_base {
      * @Then /^I should see response status code "([^"]*)"$/
      * @param string $statuscode
      */
-    public function ishouldseeresponsertatuscode($statuscode) {
+    public function i_should_see_response_status_code($statuscode) {
         $responsestatuscode = $this->response->getStatusCode();
-        if (!$responsectatuscode == intval($statuscode)) {
-            throw new \Exception(sprintf("Did not see response status code %s, but %s.", $statuscode, $responsectatuscode));
+        if (!$responsestatuscode == intval($statuscode)) {
+            throw new \Exception(sprintf("Did not see response status code %s, but %s.", $statuscode, $responsestatuscode));
         }
     }
 
