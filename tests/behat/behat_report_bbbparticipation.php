@@ -46,7 +46,7 @@ class behat_report_bbbparticipation extends behat_base {
 
     /**
      * checks the status code.
-     * 
+     *
      * @Then /^I should see response status code "([^"]*)"$/
      */
     public function ishouldseeresponsertatuscode($statuscode) {
