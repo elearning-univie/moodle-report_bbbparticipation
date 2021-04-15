@@ -32,19 +32,6 @@
 class behat_report_bbbparticipation extends behat_base {
 
     /**
-     * Checks that Ghostscript is installed.
-     *
-     * @Given /^ghostscript is installed$/
-     */
-    public function ghostscript_is_installed() {
-        $testpath = assignfeedback_editpdf\pdf::test_gs_path();
-        if (!extension_loaded('zlib') or
-            $testpath->status !== assignfeedback_editpdf\pdf::GSPATH_OK) {
-            throw new \Moodle\BehatExtension\Exception\SkippedException;
-        }
-    }
-
-    /**
      * checks the status code.
      *
      * @Then /^I should see response status code "([^"]*)"$/
