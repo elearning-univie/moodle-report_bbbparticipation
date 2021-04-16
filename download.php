@@ -50,30 +50,19 @@ $PAGE->set_url('/report/bbbparticipation/download.php?' . $arrays, [
 
 $output = $PAGE->get_renderer('report_bbbparticipation');
 
-switch ($format) {
-    case report_bbbparticipation_base::FORMAT_CSV:
-        $formatreadable = 'CSV';
-        break;
-    case report_bbbparticipation_base::FORMAT_ODS:
-        $formatreadable = 'ODS';
-        break;
-    default:
-    case report_bbbparticipation_base::FORMAT_XLSX:
-        $formatreadable = 'XLSX';
-        break;
-}
-
 $report = new report_bbbparticipation_overview($id, $instances);
 
 switch ($format) {
     case report_bbbparticipation_base::FORMAT_CSV:
+        $formatreadable = 'CSV';
         $report->get_csv();
         break;
     case report_bbbparticipation_base::FORMAT_ODS:
+        $formatreadable = 'ODS';
         $report->get_ods();
         break;
     default:
-    case report_bbbparticipation_base::FORMAT_XLSX:
+        $formatreadable = 'XLSX';
         $report->get_xlsx();
         break;
 }
