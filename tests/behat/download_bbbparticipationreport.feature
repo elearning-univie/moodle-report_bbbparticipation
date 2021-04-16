@@ -24,9 +24,8 @@ Feature: As a teacher I want to download the BBB participation report
 
   @javascript
   Scenario: I can download the BBB participation report as xlsx
-    And I click on "Actions menu" "link"
+    When I click on "Actions menu" "link"
     And I click on "More..." "link"
     And I click on "BBB participation" "link"
-    And I should see "BBB participation"
-    Then following ".XLSX" should download between "1" and "10240" bytes
-    Then following ".CSV" should download between "1" and "10240" bytes
+    Then I should see "BBB participation"
+    And following ".XLSX" should download between "1" and "10240" bytes
