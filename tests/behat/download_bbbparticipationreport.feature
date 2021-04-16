@@ -23,9 +23,10 @@ Feature: As a teacher I want to download the BBB participation report
       | Virtual classroom name | BBB1 |
 
   @javascript
-  Scenario: I can download the BBB participation report as csv
+  Scenario: I can download the BBB participation report as xlsx
     And I click on "Actions menu" "link"
     And I click on "More..." "link"
     And I click on "BBB participation" "link"
     And I should see "BBB participation"
     Then following ".XLSX" should download between "1" and "10240" bytes
+    Then following ".CSV" should download between "1" and "10240" bytes

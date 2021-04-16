@@ -623,7 +623,7 @@ class report_bbbparticipation_base {
         }
 
         $filecontent = $content;
-        header('Content-Type: text/plain');
+        header('Content-Type: text/csv');
         header('Content-Length: ' . strlen($filecontent));
         header('Content-Disposition: attachment; filename="' . $filename . '"; filename*="' . rawurlencode($filename));
         header('Content-Transfer-Encoding: binary');
