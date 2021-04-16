@@ -597,8 +597,12 @@ class report_bbbparticipation_base {
         $content = '';
         foreach ($table->head as $hrow) {
             foreach ($hrow->cells as $idx => $cell) {
-                if (!is_null($cell->text) && $cell->text) {
-                    $content .= $cell->text . $sep;
+                if (!is_null($cell) && !is_null($cell->text)) {
+                    if ($cell->text) {
+                        $content .= $cell->text . $sep;
+                    } else {
+                        $content .= $sep;
+                    }
                 } else {
                     $content .= $sep;
                 }
