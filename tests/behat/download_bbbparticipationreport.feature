@@ -28,5 +28,4 @@ Feature: As a teacher I want to download the BBB participation report
     And I click on "More..." "link"
     And I click on "BBB participation" "link"
     And I should see "BBB participation"
-    And I click on ".CSV" "link"
-    Then I should see in the header "Content-Type":"text/plain"
+    Then following ".CSV" should download between "1" and "10240" bytes
