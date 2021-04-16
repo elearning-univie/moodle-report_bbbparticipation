@@ -45,13 +45,12 @@ class behat_report_bbbparticipation extends behat_base {
     }
     /**
      * check header.
-     * 
+     *
      * @Then /^I should see in the header "([^"]*)":"([^"]*)"$/
      * @param string $header
      * @param string $value
      */
-    public function i_should_see_in_the_header($header, $value)
-    {
+    public function i_should_see_in_the_header($header, $value) {
         $headers = $this->response->getHeaders();
         if ($headers->get($header) != $value) {
             throw new \Exception(sprintf("Did not see %s with value %s.", $header, $value));
