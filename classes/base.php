@@ -41,10 +41,8 @@ class report_bbbparticipation_base {
     const FORMAT_XLS = 1;
     /** open document format */
     const FORMAT_ODS = 2;
-    /** xml format */
-    const FORMAT_XML = 3;
-    /** plain text file format */
-    const FORMAT_TXT = 4;
+    /** csv format */
+    const FORMAT_CSV = 3;
     /** show all columns */
     const SHOW_ALL_COLUMNS = 'all';
 
@@ -115,7 +113,6 @@ class report_bbbparticipation_base {
         }
 
         $users = $DB->get_fieldset_sql($sql, $params);
-        $returndata['users'] = $users;
 
         $data = $this->get_user_data($course, $users, $this->instances);
         $this->data = $data;
@@ -426,6 +423,51 @@ class report_bbbparticipation_base {
     }
 
     /**
+     * Returns the header for the column user name based on the display settings for fullname
+     *
+     * @param bool $alternativename - sets whether alternativefullname should be used     *
+     * @param bool $seperatecolumns - specifies if the names should be returned as one string seperated by '/' or as an array
+     * @param array $sortablearray An array to be filled with all names that can be sorted for. If set the names are returned as
+     *                             sortable links. Otherwise the attributes of the names are returned
+     * @return string|array fullname field names seperated by '/' or array coltaining all fullname fragments
+     */
+    public function get_name_header($alternativename = false, $seperatecolumns = false, &$sortablearray = null) {
+        global $CFG, $PAGE;
+        // Find name fields used in nameformat and create columns in the same order.
+        if ($alternativename) {
+            $nameformat = $CFG->alternativefullnameformat;
+        } else {
+            $nameformat = $CFG->fullnamedisplay;
+        }
+        // Use default setting from language if no other format is defined.
+        if ($nameformat == 'language') {
+            $nameformat = get_string('fullnamedisplay');
+        }
+        $allnamefields = get_all_user_name_fields();
+        $usednamefields = [];
+        foreach ($allnamefields as $name) {
+            if (($position = strpos($nameformat, $name)) !== false) {
+                $usednamefields[$position] = $name;
+            }
+        }
+        // Sort names in the order stated in $nameformat.
+        ksort($usednamefields);
+        $links = [];
+        foreach ($usednamefields as $name) {
+            if (isset($sortablearray)) {
+                $links[] = $this->get_sortlink($name, get_string($name), $PAGE->url);
+                $sortablearray[] = $name;
+            } else {
+                $links[] = $name;
+            }
+        }
+        if ($seperatecolumns) {
+            return $links;
+        }
+        return implode(' / ', $links);
+    }
+
+    /**
      * Get link with selected instances
      *
      * @param string|moodle_url $url the base url for all links
@@ -541,6 +583,53 @@ class report_bbbparticipation_base {
         $filename = get_string('pluginname', 'report_bbbparticipation') . '_' . $course->shortname;
         $workbook->send($filename);
         $workbook->close();
+    }
+
+    /**
+     * Generate CSV
+     */
+    public function get_csv() {
+        global $COURSE;
+
+        $sep = ',';
+        $filename = get_string('pluginname', 'report_bbbparticipation') . '_' . $COURSE->shortname;
+        $table = $this->get_table(true);
+        $content = '';
+        foreach ($table->head as $hrow) {
+            foreach ($hrow->cells as $idx => $cell) {
+                if (!is_null($cell) && !is_null($cell->text)) {
+                    if ($cell->text) {
+                        $content .= $cell->text . $sep;
+                    } else {
+                        $content .= $sep;
+                    }
+                } else {
+                    $content .= $sep;
+                }
+            }
+            $content .= "\n";
+        }
+
+        foreach ($table->data as $drow) {
+            foreach ($drow->cells as $idx => $cell) {
+                if ($idx === 'fullnameuser') {
+                    preg_match('/">(.*?)<\/a>/s', $cell->text, $matches);
+                    $content .= $matches[1] . $sep;
+                } else {
+                    $content .= $cell->text . $sep;
+                }
+            }
+            $content .= "\n";
+        }
+
+        $filecontent = $content;
+        header('Content-Type: text/csv');
+        header('Content-Length: ' . strlen($filecontent));
+        header('Content-Disposition: attachment; filename="' . $filename . '"; filename*="' . rawurlencode($filename));
+        header('Content-Transfer-Encoding: binary');
+        header('Content-Encoding: utf-8');
+        echo $filecontent;
+        die();
     }
 
     /**

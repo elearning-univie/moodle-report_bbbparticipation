@@ -52,7 +52,6 @@ class report_bbbparticipation_overview extends report_bbbparticipation_base impl
      * @return html_table report as html_table object
      */
     public function get_table($forexport = false) {
-        global $DB, $PAGE;
 
         $context = context_course::instance($this->courseid);
 
@@ -70,169 +69,96 @@ class report_bbbparticipation_overview extends report_bbbparticipation_base impl
         $tablecolumns = [];
         $table->colgroups = [];
         $sortable = [];
-        $useridentity = get_extra_user_fields($context);
-        // Firstname sortlink.
-        $firstname = $this->get_sortlink('firstname', get_string('firstname'), $PAGE->url);
-        // Lastname sortlink.
-        $lastname = $this->get_sortlink('lastname', get_string('lastname'), $PAGE->url);
-            $tableheaders['fullnameuser'] = new html_table_cell($this->get_name_header(has_capability('moodle/site:viewfullnames',
-                    $context), false, $sortable));
+        $tableheaders['fullnameuser'] = new html_table_cell(get_string('firstname') . '/' . get_string('lastname'));
 
-            $tableheaders['fullnameuser']->header = true;
-            $tableheaders['fullnameuser']->rowspan = 2;
-            $tableheaders2['fullnameuser'] = null;
-            $tablecolumns[] = 'fullnameuser';
-            $table->colgroups[] = [
-                    'span' => '1',
-                    'class' => 'fullnameuser'
-            ];
-            $table->colclasses['fullnameuser'] = 'fullnameuser';
+        $tableheaders['fullnameuser']->header = true;
+        $tableheaders['fullnameuser']->rowspan = 2;
+        $tableheaders2['fullnameuser'] = null;
+        $tablecolumns[] = 'fullnameuser';
+        $table->colgroups[] = [
+                'span' => '1',
+                'class' => 'fullnameuser'
+        ];
+        $table->colclasses['fullnameuser'] = 'fullnameuser';
 
-            $instances = $this->get_courseinstances();
-            $ctr = 1;
+        $instances = $this->get_courseinstances();
+
+        $ctr = 1;
+        foreach ($instances as $instance) {
+
+            $bbbsessionstime = $this->get_session_time_for_instance($instance->id);
+            $span = count($bbbsessionstime);
+            if ($span > 0) {
+                $tableheaders['instance' . $instance->id] = new html_table_cell($instance->name);
+                $tableheaders['instance' . $instance->id]->header = true;
+                $tableheaders['instance' . $instance->id]->scope = 'colgroup';
+                $tableheaders['instance' . $instance->id]->id = $instance->coursemodule;
+                $table->colclasses['instance' . $instance->id] = 'instance' . $instance->id;
+
+                for ($i = 1; $i < $span; $i++) {
+                    // Insert empty cells for the colspan!
+                    $tableheaders[] = null;
+                }
+                $tableheaders['instance' . $instance->id]->colspan = $span;
+                $table->colgroups[] = [
+                 'span' => $span,
+                 'class' => 'instancegroup'
+                ];
+
+                if (!empty($bbbsessionstime)) {
+                    foreach ($bbbsessionstime as $bbbstarts) {
+                        $datestring = userdate($bbbstarts, get_string('strftimedatemonthabbr', 'langconfig')) . " " .
+                                      userdate($bbbstarts, get_string('strftimetime24', 'langconfig'));
+                        $tableheaders2['time' . $ctr . 'i' . $instance->id] = new html_table_cell($datestring);
+                        $tableheaders2['time' . $ctr . 'i' . $instance->id]->header = true;
+                        $tablecolumns[] = 'time' . $ctr . 'i' . $instance->id;
+                        $table->colclasses['time' . $ctr . 'i' . $instance->id] = 'instance' . $instance->id . ' time' . $ctr;
+                        $ctr++;
+                    }
+                }
+            }
+        }
+
+        $table->head = [];
+        $table->head[0] = new html_table_row();
+        $table->head[0]->cells = $tableheaders;
+        $table->head[1] = new html_table_row();
+        $table->head[1]->cells = $tableheaders2;
+
+        foreach ($data as $userid => $curuser) {
+            $row = [];
+            $userurl = new moodle_url('/user/view.php', [
+                'id' => $userid,
+                'course' => $this->courseid
+            ]);
+                $userlink = html_writer::link($userurl, fullname($curuser, has_capability('moodle/site:viewfullnames', $context)));
+                $row['fullnameuser'] = new html_table_cell($userlink);
+                $ictr = 1;
+                $ctr = 1;
             foreach ($instances as $instance) {
-
-                $bbbsessionstime = $this->get_session_time_for_instance($instance->id);
-                $span = count($bbbsessionstime);
+                    $bbbsessionstime = $this->get_session_time_for_instance($instance->id);
+                    $span = count($bbbsessionstime);
                 if ($span > 0) {
-                    $instanceurl = new moodle_url('/mod/bigbluebuttonbn/view.php', ['id' => $instance->coursemodule]);
-                    $instancelink = html_writer::link($instanceurl, $instance->name, ['target' => '_blank']);
-                    $tableheaders['instance' . $instance->id] = new html_table_cell($instancelink);
-                    $tableheaders['instance' . $instance->id]->header = true;
-                    $tableheaders['instance' . $instance->id]->scope = 'colgroup';
-                    $table->colclasses['instance' . $instance->id] = 'instance' . $instance->id;
-
-                    for ($i = 1; $i < $span; $i++) {
-                        // Insert empty cells for the colspan!
-                        $tableheaders[] = null;
-                    }
-                    $tableheaders['instance' . $instance->id]->colspan = $span;
-                    $table->colgroups[] = [
-                     'span' => $span,
-                     'class' => 'instancegroup'
-                    ];
-
-                    if (!empty($bbbsessionstime)) {
-                        foreach ($bbbsessionstime as $bbbstarts) {
-                            $datestring = userdate($bbbstarts, get_string('strftimedatemonthabbr', 'langconfig')) . "<br>" .
-                                          userdate($bbbstarts, get_string('strftimetime24', 'langconfig'));
-                            $tableheaders2['time' . $ctr . 'i' . $instance->id] = new html_table_cell($datestring);
-                            $tableheaders2['time' . $ctr . 'i' . $instance->id]->header = true;
-                            $tablecolumns[] = 'time' . $ctr . 'i' . $instance->id;
-                            $table->colclasses['time' . $ctr . 'i' . $instance->id] = 'instance' . $instance->id . ' time' . $ctr;
-                            $ctr++;
+                        $sctr = 0;
+                    foreach ($bbbsessionstime as $ses) {
+                        $text = '1';
+                        if ($participationdata['i'. $ictr. 's' . $ctr][$userid] == 0 ) {
+                            $text = '0';
                         }
+                        $row['time' . $ctr . 'i' . $instance->id] = new html_table_cell($text);
+                        $sctr++;
+                        $ctr++;
                     }
                 }
+                $ictr++;
             }
 
-            $table->head = [];
-            $table->head[0] = new html_table_row();
-            $table->head[0]->cells = $tableheaders;
-            $table->head[1] = new html_table_row();
-            $table->head[1]->cells = $tableheaders2;
-
-            foreach ($data as $userid => $curuser) {
-                $row = [];
-                $userurl = new moodle_url('/user/view.php', [
-                    'id' => $userid,
-                    'course' => $this->courseid
-                ]);
-
-                    $userlink = html_writer::link($userurl, fullname($curuser, has_capability('moodle/site:viewfullnames', $context)));
-                    $row['fullnameuser'] = new html_table_cell($userlink);
-                    $ictr = 1;
-                    $ctr = 1;
-                foreach ($instances as $instance) {
-                        $bbbsessionstime = $this->get_session_time_for_instance($instance->id);
-                        $span = count($bbbsessionstime);
-                    if ($span > 0) {
-                            $sctr = 0;
-                        foreach ($bbbsessionstime as $ses) {
-                                $text = get_string('yes');
-                            if ($participationdata['i'. $ictr. 's' . $ctr][$userid] == 0 ) {
-                                    $text = get_string('no');
-                            }
-                            $row['time' . $ctr . 'i' . $instance->id] = new html_table_cell($text);
-                            $sctr++;
-                            $ctr++;
-                        }
-                    }
-                    $ictr++;
-                }
-
-                $table->data[$userid] = new html_table_row();
-                $table->data[$userid]->cells = $row;
-            }
-            $performance->table_built = microtime(true);
-
-            return $table;
-    }
-
-    /**
-     * Returns the header for the column user name based on the display settings for fullname
-     *
-     * @param bool $alternativename - sets whether alternativefullname should be used     *
-     * @param bool $seperatecolumns - specifies if the names should be returned as one string seperated by '/' or as an array
-     * @param array $sortablearray An array to be filled with all names that can be sorted for. If set the names are returned as
-     *                             sortable links. Otherwise the attributes of the names are returned
-     * @return string|array fullname field names seperated by '/' or array coltaining all fullname fragments
-     */
-    private function get_name_header($alternativename = false, $seperatecolumns = false, &$sortablearray = null) {
-        global $CFG, $PAGE;
-        // Find name fields used in nameformat and create columns in the same order.
-        if ($alternativename) {
-            $nameformat = $CFG->alternativefullnameformat;
-        } else {
-            $nameformat = $CFG->fullnamedisplay;
+            $table->data[$userid] = new html_table_row();
+            $table->data[$userid]->cells = $row;
         }
-        // Use default setting from language if no other format is defined.
-        if ($nameformat == 'language') {
-            $nameformat = get_string('fullnamedisplay');
-        }
-        $allnamefields = get_all_user_name_fields();
-        $usednamefields = [];
-        foreach ($allnamefields as $name) {
-            if (($position = strpos($nameformat, $name)) !== false) {
-                $usednamefields[$position] = $name;
-            }
-        }
-        // Sort names in the order stated in $nameformat.
-        ksort($usednamefields);
-        $links = [];
-        foreach ($usednamefields as $name) {
-            if (isset($sortablearray)) {
-                $links[] = $this->get_sortlink($name, get_string($name), $PAGE->url);
-                $sortablearray[] = $name;
-            } else {
-                $links[] = $name;
-            }
-        }
-        if ($seperatecolumns) {
-            return $links;
-        }
-        return implode(' / ', $links);
-    }
+        $performance->table_built = microtime(true);
 
-    /**
-     * Returns the grade percentage (if applicable) or '-' for the instance!
-     *
-     * @param stdClass $instancedata Instancedata to process
-     * @return string grade percentage (human readable)
-     */
-    protected function get_instance_percgrade($instancedata) {
-        if ($instancedata->finalgrade->overridden || ($instancedata->finalgrade->grade != $instancedata->grade)) {
-            $grade = (empty($instancedata->finalgrade->grade) ? 0 : $instancedata->finalgrade->grade);
-            if ($instancedata->maxgrade > 0) {
-                $percgrade = round(100 * $grade / $instancedata->maxgrade, 2) . ' %';
-            } else {
-                $percgrade = '-';
-            }
-        } else {
-            $percgrade = round((empty($instancedata->percentgrade) ? 0 : $instancedata->percentgrade), 2) . ' %';
-        }
-
-        return $percgrade;
+        return $table;
     }
 
     /**
@@ -289,7 +215,6 @@ class report_bbbparticipation_overview extends report_bbbparticipation_base impl
                 // Convert array rows to html_table_rows and cell strings to html_table_cell objects!
                 if (!($row instanceof html_table_row)) {
                     $newrow = new html_table_row();
-
                     foreach ($row as $cell) {
                         if (!($cell instanceof html_table_cell)) {
                             $cell = new html_table_cell($cell);
@@ -356,4 +281,5 @@ class report_bbbparticipation_overview extends report_bbbparticipation_base impl
             }
         }
     }
+
 }
