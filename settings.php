@@ -23,7 +23,7 @@
  */
 defined('MOODLE_INTERNAL') || die();
 
-$settings = new admin_settingpage('bbbparticipationsettings', get_string('pluginname','report_bbbparticipation'));
+$settings = new admin_settingpage('bbbparticipationsettings', get_string('pluginname', 'report_bbbparticipation'));
 
 if ($ADMIN->fulltree) {
     $settings->add(new admin_setting_configcheckbox(

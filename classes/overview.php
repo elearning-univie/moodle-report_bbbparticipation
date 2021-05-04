@@ -55,7 +55,7 @@ class report_bbbparticipation_overview extends report_bbbparticipation_base impl
         global $CFG;
         $context = context_course::instance($this->courseid);
 
-        $showidnumber = get_config('report_bbbparticipation','additionaluserinfo');
+        $showidnumber = get_config('report_bbbparticipation', 'additionaluserinfo');
 
         $performance = new stdClass();
         $performance->start = microtime(true);
@@ -101,7 +101,7 @@ class report_bbbparticipation_overview extends report_bbbparticipation_base impl
             $table->colclasses['fullnameuser'] = 'fullnameuser';
         }
 
-        if($showidnumber) {
+        if ($showidnumber) {
             $tableheaders['idnumber'] = new html_table_cell(get_string('idnumber'));
             $tableheaders['idnumber']->header = true;
             $tableheaders['idnumber']->rowspan = 2;
@@ -173,7 +173,7 @@ class report_bbbparticipation_overview extends report_bbbparticipation_base impl
                 $row[$cur] = new html_table_cell($curuser->$cur);
             }
 
-            if($showidnumber) {
+            if ($showidnumber) {
                 $row['idnumber'] = new html_table_cell($curuser->idnumber);
             }
             $ictr = 1;
