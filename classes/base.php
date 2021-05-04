@@ -131,7 +131,7 @@ class report_bbbparticipation_base {
     public function get_user_data($course = null, $userids = 0, $instances = [0]) {
         global $DB, $COURSE, $SESSION;
 
-        $ufields = user_picture::fields('u');
+        $ufields = user_picture::fields('u', ['idnumber']);
 
         if ($course == null) {
             $course = $COURSE;
@@ -149,7 +149,8 @@ class report_bbbparticipation_base {
         $sortable = [
             'firstname',
             'lastname',
-            'alternatename'
+            'alternatename',
+            'idnumber'
         ];
         $sortarr = $SESSION->bbbparticipation->{$this->courseid}->sort;
         $sort = '';

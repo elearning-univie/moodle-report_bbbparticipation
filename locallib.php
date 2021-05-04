@@ -36,3 +36,20 @@ function report_bbbparticipation_get_bbb_activities_for_course(int $courseid) {
     $bbblist = $DB->get_records('bigbluebuttonbn', ['course' => $courseid], 'id');
     return $bbblist;
 }
+
+/**
+ * Helper function renders wait for moderator settings if the feature is enabled.
+ *
+ * @param object $renderer
+ *
+ * @return void
+ */
+function report_bbbparticipation_settings_additionaluserinfo(&$renderer) {
+
+    $renderer->render_group_header('additionaluserinfo');
+    $renderer->render_group_element(
+        'additionaluserinfo_default',
+        $renderer->render_group_element_checkbox('additionaluserinfo_default', 0)
+        );
+
+}

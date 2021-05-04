@@ -52,8 +52,10 @@ class report_bbbparticipation_overview extends report_bbbparticipation_base impl
      * @return html_table report as html_table object
      */
     public function get_table($forexport = false) {
-
+        global $CFG;
         $context = context_course::instance($this->courseid);
+
+        $showidnumber = get_config('report_bbbparticipation','additionaluserinfo');
 
         $performance = new stdClass();
         $performance->start = microtime(true);
@@ -69,18 +71,48 @@ class report_bbbparticipation_overview extends report_bbbparticipation_base impl
         $tablecolumns = [];
         $table->colgroups = [];
         $sortable = [];
-        $tableheaders['fullnameuser'] = new html_table_cell(get_string('firstname') . '/' . get_string('lastname'));
 
-        $tableheaders['fullnameuser']->header = true;
-        $tableheaders['fullnameuser']->rowspan = 2;
-        $tableheaders2['fullnameuser'] = null;
-        $tablecolumns[] = 'fullnameuser';
-        $table->colgroups[] = [
+        $namecolumns = [];
+        if ($forexport) {
+            $namecolumns = $this->get_name_header(has_capability('moodle/site:viewfullnames', $context),
+                $forexport);
+            foreach ($namecolumns as $cur) {
+                $tableheaders[$cur] = new html_table_cell(get_string($cur));
+                $tableheaders[$cur]->header = true;
+                $tableheaders[$cur]->rowspan = 2;
+                $tableheaders2[$cur] = null;
+                $tablecolumns[] = $cur;
+                $table->colgroups[] = [
+                    'span' => '1',
+                    'class' => $cur
+                ];
+                $table->colclasses[$cur] = $cur;
+            }
+        } else {
+            $tableheaders['fullnameuser'] = new html_table_cell(get_string('firstname') . '/' . get_string('lastname'));
+            $tableheaders['fullnameuser']->header = true;
+            $tableheaders['fullnameuser']->rowspan = 2;
+            $tableheaders2['fullnameuser'] = null;
+            $tablecolumns[] = 'fullnameuser';
+            $table->colgroups[] = [
+                    'span' => '1',
+                    'class' => 'fullnameuser'
+            ];
+            $table->colclasses['fullnameuser'] = 'fullnameuser';
+        }
+
+        if($showidnumber) {
+            $tableheaders['idnumber'] = new html_table_cell(get_string('idnumber'));
+            $tableheaders['idnumber']->header = true;
+            $tableheaders['idnumber']->rowspan = 2;
+            $tableheaders2['idnumber'] = null;
+            $tablecolumns[] = 'idnumber';
+            $table->colgroups[] = [
                 'span' => '1',
-                'class' => 'fullnameuser'
-        ];
-        $table->colclasses['fullnameuser'] = 'fullnameuser';
-
+                'class' => 'idnumber'
+            ];
+            $table->colclasses['idnumber'] = 'idnumber';
+        }
         $instances = $this->get_courseinstances();
 
         $ctr = 1;
@@ -131,10 +163,21 @@ class report_bbbparticipation_overview extends report_bbbparticipation_base impl
                 'id' => $userid,
                 'course' => $this->courseid
             ]);
-                $userlink = html_writer::link($userurl, fullname($curuser, has_capability('moodle/site:viewfullnames', $context)));
+
+            if (!$forexport) {
+                $userlink =
+                html_writer::link($userurl, fullname($curuser, has_capability('moodle/site:viewfullnames', $context)));
                 $row['fullnameuser'] = new html_table_cell($userlink);
-                $ictr = 1;
-                $ctr = 1;
+            }
+            foreach ($namecolumns as $cur) {
+                $row[$cur] = new html_table_cell($curuser->$cur);
+            }
+
+            if($showidnumber) {
+                $row['idnumber'] = new html_table_cell($curuser->idnumber);
+            }
+            $ictr = 1;
+            $ctr = 1;
             foreach ($instances as $instance) {
                     $bbbsessionstime = $this->get_session_time_for_instance($instance->id);
                     $span = count($bbbsessionstime);
