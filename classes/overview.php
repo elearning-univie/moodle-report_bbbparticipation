@@ -52,7 +52,7 @@ class report_bbbparticipation_overview extends report_bbbparticipation_base impl
      * @return html_table report as html_table object
      */
     public function get_table($forexport = false) {
-        global $CFG;
+
         $context = context_course::instance($this->courseid);
 
         $showidnumber = get_config('report_bbbparticipation', 'additionaluserinfo');
