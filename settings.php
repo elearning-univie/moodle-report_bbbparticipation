@@ -15,17 +15,22 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version info
+ * Settings for BBBParticipation Report.
  *
  * @package   report_bbbparticipation
- * @copyright  2021 University of Vienna
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @copyright 2021 University of Vienna
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+defined('MOODLE_INTERNAL') || die();
 
-defined('MOODLE_INTERNAL') || die;
+$settings = new admin_settingpage('bbbparticipationsettings', get_string('pluginname', 'report_bbbparticipation'));
 
-$plugin->version   = 2021051000;             // The current plugin version (Date: YYYYMMDDXX)
-$plugin->requires  = 2020061501;             // Requires this Moodle version
-$plugin->component = 'report_bbbparticipation'; // Full name of the plugin (used for diagnostics)
-$plugin->maturity = MATURITY_STABLE;
-$plugin->dependencies = array('mod_bigbluebuttonbn' => 2021030500);
+if ($ADMIN->fulltree) {
+    $settings->add(new admin_setting_configcheckbox(
+        'report_bbbparticipation/additionaluserinfo',
+        get_string('additionaluserinfo', 'report_bbbparticipation'),
+        get_string('additionaluserinfo_description', 'report_bbbparticipation'),
+        1
+        ));
+}
+

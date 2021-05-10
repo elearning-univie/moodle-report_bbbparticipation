@@ -211,6 +211,11 @@ class report_bbbparticipation_renderer extends plugin_renderer_base {
                              $context), false, $sortable);
                         $heading->text = $fullnamestr;
                     }
+                    if ($key === 'idnumber' && ($heading instanceof html_table_cell)) {
+                        $sortable = [];
+                        $idnumberstr = $report->get_sortlink('idnumber', get_string('idnumber'), $this->page->url);
+                        $heading->text = $idnumberstr;
+                    }
                     if (strpos($key, 'instance') !== false && $heading->id != null) {
                         $instanceurl = new moodle_url('/mod/bigbluebuttonbn/view.php', ['id' => $heading->id]);
                         $instancelink = html_writer::link($instanceurl, $heading->text, ['target' => '_blank']);
