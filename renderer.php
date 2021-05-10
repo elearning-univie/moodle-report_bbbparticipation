@@ -115,7 +115,7 @@ class report_bbbparticipation_renderer extends plugin_renderer_base {
      * @return string HTML code
      */
     protected function table(html_table $table, report_bbbparticipation_base $report = null) {
-        global $COURSE;
+        global $COURSE, $PAGE;
 
         if ($report == null) {
             $nohide = true;
@@ -210,6 +210,11 @@ class report_bbbparticipation_renderer extends plugin_renderer_base {
                          $fullnamestr = $report->get_name_header(has_capability('moodle/site:viewfullnames',
                              $context), false, $sortable);
                         $heading->text = $fullnamestr;
+                    }
+                    if ($key === 'idnumber' && ($heading instanceof html_table_cell)) {
+                        $sortable = [];
+                        $idnumberstr = $report->get_sortlink('idnumber', get_string('idnumber'), $PAGE->url);
+                        $heading->text = $idnumberstr;
                     }
                     if (strpos($key, 'instance') !== false && $heading->id != null) {
                         $instanceurl = new moodle_url('/mod/bigbluebuttonbn/view.php', ['id' => $heading->id]);
