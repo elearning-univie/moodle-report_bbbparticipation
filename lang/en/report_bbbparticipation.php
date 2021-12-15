@@ -30,6 +30,7 @@ $string['additionaluserinfo'] = 'Use id number in table';
 $string['additionaluserinfo_description'] = 'Add the id number field to the table.';
 $string['exportas'] = 'Export as';
 $string['modulenameplural'] = 'BBBs';
+$string['pagesize'] = 'Entries per page';
 $string['pluginname'] = 'BBB participation';
 $string['privacy:metadata'] = 'The BBB participation plugin does not store any personal data.';
 $string['update'] = 'Update';
