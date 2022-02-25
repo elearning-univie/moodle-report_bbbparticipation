@@ -85,7 +85,7 @@ class attendancetable extends table_sql {
         $this->authors = array();
         $this->perpage = $perpage;
 
-        $columns = array('fullname', 'idnumber');
+        $columns = array('fullname', 'arty', 'idnumber');
         $columns = array_merge($columns, $fieldnames);
 
         $this->define_columns($columns);
@@ -93,6 +93,7 @@ class attendancetable extends table_sql {
         // Define the titles of columns to show in header.
         $headers = array(
             get_string('fullname'),
+            get_string('role'),
             get_string('idnumber'),
         );
         $headers = array_merge($headers, $fieldheaders);

@@ -33,4 +33,6 @@ $string['modulenameplural'] = 'BBBs';
 $string['pagesize'] = 'Entries per page';
 $string['pluginname'] = 'BBB participation';
 $string['privacy:metadata'] = 'The BBB participation plugin does not store any personal data.';
+$string['roles_shown'] = 'Roles for report';
+$string['roles_shown_desc'] = 'Roles which are shown in the BBB participation report';
 $string['update'] = 'Update';
