@@ -158,7 +158,7 @@ $templateinfo['selects'] = $selects;
  $sql = "SELECT * FROM {role} WHERE id $rsql";
  $rrecords = $DB->get_records_sql($sql, $rparams);
 
-$roleselects = [get_string('allbbbs', 'report_bbbparticipation')];
+$roleselects = [get_string('allroles', 'report_bbbparticipation')];
 foreach ($rrecords as $roles) {
     $roleselects[$roles->id] = $roles->archetype;
 }

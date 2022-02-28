@@ -23,6 +23,7 @@
  */
 
 $string['allbbbs'] = 'All BBBs';
+$string['allroles'] = 'All roles';
 $string['bbbparticipation:students'] = 'BBB participation report students';
 $string['bbbparticipation:view'] = 'View BBB participation report';
 $string['bbbparticipationreport'] = 'BBB participation report';
@@ -33,6 +34,7 @@ $string['modulenameplural'] = 'BBBs';
 $string['pagesize'] = 'Entries per page';
 $string['pluginname'] = 'BBB participation';
 $string['privacy:metadata'] = 'The BBB participation plugin does not store any personal data.';
+$string['roles'] = 'Roles';
 $string['roles_shown'] = 'Roles for report';
 $string['roles_shown_desc'] = 'Roles which are shown in the BBB participation report';
 $string['update'] = 'Update';
