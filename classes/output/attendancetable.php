@@ -48,23 +48,8 @@ class attendancetable extends table_sql {
     /** @var int course id */
     private $courseid;
 
-    /** @var string text for the edit icon */
-    private $editicontext;
-
-    /** @var string text for the delete icon */
-    private $deleteicontext;
-
-    /** @var string text for the preview icon */
-    private $previewicontext;
-
-    /** @var string jump back url if a question is getting deleted */
-    private $returnurl;
-
     /** @var array array to save previously looked up authors */
     private $authors;
-
-    /** @var object course module context */
-    private $context;
 
     /**
      * studentviewtable constructor.

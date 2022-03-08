@@ -30,8 +30,8 @@ require_once($CFG->dirroot.'/report/bbbparticipation/lib.php');
 
 define('DEFAULT_PAGE_SIZE', 20);
 
-$id         = required_param('id', PARAM_INT); // course id.
-$roleid     = optional_param('roleid', 0, PARAM_INT); // which role to show
+$id         = required_param('id', PARAM_INT); // Course id.
+$roleid     = optional_param('roleid', 0, PARAM_INT); // Which role to show.
 $action     = optional_param('action', '', PARAM_ALPHA);
 $perpage = optional_param('perpage', DEFAULT_PAGE_SIZE, PARAM_INT);
 $bbbsel = optional_param_array('bbbs', [0], PARAM_INT);
@@ -80,8 +80,6 @@ $PAGE->set_title(format_string($course->shortname, true, array('context' => $con
 $PAGE->set_heading(format_string($course->fullname, true, array('context' => $context)));
 $PAGE->set_context($context);
 $PAGE->set_course($course);
-
-$output = $PAGE->get_renderer('report_bbbparticipation');
 
 list($fields, $params, $fieldnames, $fieldheaders) = report_bbbparticipation_get_sql_fields($id, $bbbsel);
 $params['courseid'] = $course->id;
@@ -153,7 +151,7 @@ $selects[] = [
 
 $templateinfo['selects'] = $selects;
 
-// role select
+// Role select.
  list($rsql, $rparams) = $DB->get_in_or_equal(explode(",", $configs));
  $sql = "SELECT * FROM {role} WHERE id $rsql";
  $rrecords = $DB->get_records_sql($sql, $rparams);
@@ -180,13 +178,13 @@ $rselects[] = [
  $templateinfo['rselects'] = $rselects;
 
 $templateinfo['selected' . $perpage] = true;
-$renderer = $PAGE->get_renderer('core');
+$output = $PAGE->get_renderer('core');
 
 $configs = get_config('report_bbbparticipation', 'roles_shown');
 
 if (!$table->is_downloading()) {
     echo $output->header();
-    echo $renderer->render_from_template('report_bbbparticipation/reportform', $templateinfo);
+    echo $output->render_from_template('report_bbbparticipation/reportform', $templateinfo);
     $table->out($perpage, false);
     echo $output->footer();
 }
