@@ -153,7 +153,7 @@ $selects[] = [
 
 $templateinfo['selects'] = $selects;
 
-//role select 
+// role select
  list($rsql, $rparams) = $DB->get_in_or_equal(explode(",", $configs));
  $sql = "SELECT * FROM {role} WHERE id $rsql";
  $rrecords = $DB->get_records_sql($sql, $rparams);
@@ -169,11 +169,11 @@ $rselects = [];
 
 $rselects[] = [
     'roptions' => array_map(function($roption) use ($roptions, $rolesel) {
-    return [
+        return [
         'rname' => $roptions[$roption],
         'rvalue' => $roption,
         'rselected' => in_array($roption, $rolesel)
-    ];
+        ];
     }, array_keys($roptions))
     ];
 
@@ -186,10 +186,7 @@ $configs = get_config('report_bbbparticipation', 'roles_shown');
 
 if (!$table->is_downloading()) {
     echo $output->header();
-
     echo $renderer->render_from_template('report_bbbparticipation/reportform', $templateinfo);
-   // $PAGE->requires->js_call_amd('report_bbbparticipation/bbbreportlink', 'init');
- //   print_object($table->sql);
     $table->out($perpage, false);
     echo $output->footer();
 }
