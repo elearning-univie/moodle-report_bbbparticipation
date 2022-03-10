@@ -76,10 +76,12 @@ function report_bbbparticipation_get_sql_fields(int $courseid, array $instances)
                                     ' AND (:startnext'.$instance->id . 's' . $sctr.' -1)';
                     $params['startnext'.$instance->id . 's' . $sctr] = $bbbsessionstime[$sctr + 1];
                 }
-                $insql = "    IF (u.id IN (
-                         SELECT DISTINCT (l.userid)
+                $insql = "    IF (EXISTS(
+                                 SELECT 1
                                     FROM {bigbluebuttonbn_logs} l
                                    WHERE l.bigbluebuttonbnid = $instance->id
+                                     AND l.courseid = $courseid
+                                     AND l.userid = u.id
                                      AND l.log  = 'Join'
                                      AND l.timecreated " . $inbetweensql . "),'1','0') att".$instance->id . 's' . $sctr;
                 array_push($fields, $insql);
