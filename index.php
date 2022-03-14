@@ -158,7 +158,11 @@ $templateinfo['selects'] = $selects;
 
 $roleselects = [get_string('allroles', 'report_bbbparticipation')];
 foreach ($rrecords as $roles) {
-    $roleselects[$roles->id] = $roles->archetype;
+    if (empty($roles->name)) {
+        $roleselects[$roles->id] = $roles->shortname;
+    } else {
+        $roleselects[$roles->id] = $roles->name;
+    }
 }
 
 $templateinfo['roleselects'] = $roleselects;
