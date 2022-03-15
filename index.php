@@ -98,7 +98,7 @@ list($rolessql, $rolesparams) = $DB->get_in_or_equal($showroles, SQL_PARAMS_NAME
 $params = array_merge($params, $rolesparams);
 
 // Role select.
-//$usename = false;
+
 list($rsql, $rparams) = $DB->get_in_or_equal(explode(",", $configs));
 $sql = "SELECT * FROM {role} WHERE id $rsql";
 $rrecords = $DB->get_records_sql($sql, $rparams);
