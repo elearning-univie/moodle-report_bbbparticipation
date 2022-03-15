@@ -60,9 +60,10 @@ class attendancetable extends table_sql {
      * @param array $fieldnames
      * @param array $fieldheaders
      * @param int $perpage
+     * @param bool $usename
      * @throws \coding_exception
      */
-    public function __construct($uniqueid, $cmid, $callbackurl, $courseid, $fieldnames, $fieldheaders, $perpage) {
+    public function __construct($uniqueid, $cmid, $callbackurl, $courseid, $fieldnames, $fieldheaders, $perpage, $usename) {
         parent::__construct($uniqueid);
         $this->cmid = $cmid;
         $this->courseid = $courseid;
@@ -70,7 +71,11 @@ class attendancetable extends table_sql {
         $this->authors = array();
         $this->perpage = $perpage;
 
-        $columns = array('fullname', 'arty', 'idnumber');
+        $rolecolumn = 'sname';
+        if ($usename) {
+            $rolecolumn = 'rname';
+        }
+        $columns = array('fullname', $rolecolumn, 'idnumber');
         $columns = array_merge($columns, $fieldnames);
 
         $this->define_columns($columns);

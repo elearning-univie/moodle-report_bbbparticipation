@@ -97,15 +97,31 @@ if (in_array(0, $rolesel)) {
 list($rolessql, $rolesparams) = $DB->get_in_or_equal($showroles, SQL_PARAMS_NAMED, 'role');
 $params = array_merge($params, $rolesparams);
 
+// Role select.
+//$usename = false;
+list($rsql, $rparams) = $DB->get_in_or_equal(explode(",", $configs));
+$sql = "SELECT * FROM {role} WHERE id $rsql";
+$rrecords = $DB->get_records_sql($sql, $rparams);
+
+$roleselects = [get_string('allroles', 'report_bbbparticipation')];
+$usename = !in_array("", array_column($rrecords, 'name'));
+foreach ($rrecords as $roles) {
+    if ($usename) {
+        $roleselects[$roles->id] = $roles->name;
+    } else {
+        $roleselects[$roles->id] = $roles->shortname;
+    }
+}
+
 $table = new report_bbbparticipation\output\attendancetable('uniqueid', $context->id, $PAGE->url,
-         $id, $fieldnames, $fieldheaders, $perpage);
-$table->set_sql("u.id, u.picture, u.firstname, u.lastname, arty, u.firstnamephonetic, u.lastnamephonetic,
+         $id, $fieldnames, $fieldheaders, $perpage, $usename);
+$table->set_sql("u.id, u.picture, u.firstname, u.lastname, arty, sname, rname, u.firstnamephonetic, u.lastnamephonetic,
                  u.middlename, u.alternatename, u.imagealt, u.email, u.idnumber $fields",
-    "{user} u LEFT JOIN (SELECT DISTINCT eu2_u.id, ra.arty
+    "{user} u LEFT JOIN (SELECT DISTINCT eu2_u.id, ra.arty, ra.sname, ra.rname
                              FROM {user} eu2_u
                              JOIN {user_enrolments} ej2_ue ON ej2_ue.userid = eu2_u.id
                              JOIN {enrol} ej2_e ON (ej2_e.id = ej2_ue.enrolid AND ej2_e.courseid = :courseid)
-                             JOIN (SELECT DISTINCT userid, r.archetype as arty
+                             JOIN (SELECT DISTINCT userid, r.archetype as arty, r.name as rname, r.shortname as sname
                                 FROM {role_assignments} ras
                                 JOIN {role} r ON  r.id = ras.roleid
                                WHERE contextid $ctxsql
@@ -150,20 +166,6 @@ $selects[] = [
     ];
 
 $templateinfo['selects'] = $selects;
-
-// Role select.
- list($rsql, $rparams) = $DB->get_in_or_equal(explode(",", $configs));
- $sql = "SELECT * FROM {role} WHERE id $rsql";
- $rrecords = $DB->get_records_sql($sql, $rparams);
-
-$roleselects = [get_string('allroles', 'report_bbbparticipation')];
-foreach ($rrecords as $roles) {
-    if (empty($roles->name)) {
-        $roleselects[$roles->id] = $roles->shortname;
-    } else {
-        $roleselects[$roles->id] = $roles->name;
-    }
-}
 
 $templateinfo['roleselects'] = $roleselects;
 $roptions = $roleselects;
