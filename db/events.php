@@ -15,17 +15,18 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version info
+ * Report BBB participation events.
  *
- * @package   report_bbbparticipation
- * @copyright  2021 University of Vienna
+ * @package    report_bbbparticipation
+ * @copyright  2022 University of vienna
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+defined('MOODLE_INTERNAL') || die();
 
-defined('MOODLE_INTERNAL') || die;
-
-$plugin->version   = 2021121401;
-$plugin->requires  = 2020061501;
-$plugin->component = 'report_bbbparticipation';
-$plugin->maturity = MATURITY_STABLE;
-$plugin->dependencies = array('mod_bigbluebuttonbn' => 2021030500);
+$observers = [
+    [
+        'eventname'   => '\mod_bigbluebuttonbn\event\activity_viewed',
+        'callback'    => '\report_bbbparticipation\event\bbb_observer::course_module_viewed',
+        'internal'    => true,
+    ],
+];

@@ -30,11 +30,12 @@ require_once($CFG->dirroot.'/report/bbbparticipation/lib.php');
 
 define('DEFAULT_PAGE_SIZE', 20);
 
-$id         = required_param('id', PARAM_INT); // course id.
-$roleid     = optional_param('roleid', 0, PARAM_INT); // which role to show
+$id         = required_param('id', PARAM_INT); // Course id.
+$roleid     = optional_param('roleid', 0, PARAM_INT); // Which role to show.
 $action     = optional_param('action', '', PARAM_ALPHA);
 $perpage = optional_param('perpage', DEFAULT_PAGE_SIZE, PARAM_INT);
 $bbbsel = optional_param_array('bbbs', [0], PARAM_INT);
+$rolesel = optional_param_array('r', [0], PARAM_INT);
 $download = optional_param('download', '', PARAM_ALPHA);
 
 if (!in_array($perpage, [10, 20, 50, 100], true)) {
@@ -50,7 +51,9 @@ if ($download !== '') {
 foreach ($bbbsel as $bbb) {
     $params['bbbs[' . $bbb. ']'] = $bbb;
 }
-
+foreach ($rolesel as $r) {
+    $params['r[' . $r. ']'] = $r;
+}
 $url = new moodle_url('/report/bbbparticipation/index.php', $params);
 
 $PAGE->set_url($url);
@@ -78,8 +81,6 @@ $PAGE->set_heading(format_string($course->fullname, true, array('context' => $co
 $PAGE->set_context($context);
 $PAGE->set_course($course);
 
-$output = $PAGE->get_renderer('report_bbbparticipation');
-
 list($fields, $params, $fieldnames, $fieldheaders) = report_bbbparticipation_get_sql_fields($id, $bbbsel);
 $params['courseid'] = $course->id;
 if ($fields) {
@@ -87,22 +88,44 @@ if ($fields) {
 }
 list($ctxsql, $ctxparams) = $DB->get_in_or_equal($context->get_parent_context_ids(true), SQL_PARAMS_NAMED, 'ctx');
 $params = array_merge($params, $ctxparams);
-$archetypes = array('student', 'teacher');
-list($rolessql, $rolesparams) = $DB->get_in_or_equal($archetypes, SQL_PARAMS_NAMED, 'role');
+
+$configs = get_config('report_bbbparticipation', 'roles_shown');
+$showroles = $rolesel;
+if (in_array(0, $rolesel)) {
+    $showroles = explode(",", $configs);
+}
+list($rolessql, $rolesparams) = $DB->get_in_or_equal($showroles, SQL_PARAMS_NAMED, 'role');
 $params = array_merge($params, $rolesparams);
 
+// Role select.
+
+list($rsql, $rparams) = $DB->get_in_or_equal(explode(",", $configs));
+$sql = "SELECT * FROM {role} WHERE id $rsql";
+$rrecords = $DB->get_records_sql($sql, $rparams);
+
+$roleselects = [get_string('allroles', 'report_bbbparticipation')];
+$usename = !in_array("", array_column($rrecords, 'name'));
+foreach ($rrecords as $roles) {
+    if ($usename) {
+        $roleselects[$roles->id] = $roles->name;
+    } else {
+        $roleselects[$roles->id] = $roles->shortname;
+    }
+}
+
 $table = new report_bbbparticipation\output\attendancetable('uniqueid', $context->id, $PAGE->url,
-         $id, $fieldnames, $fieldheaders, $perpage);
-$table->set_sql("u.id, u.picture, u.firstname, u.lastname, u.firstnamephonetic, u.lastnamephonetic,
+         $id, $fieldnames, $fieldheaders, $perpage, $usename);
+$table->set_sql("u.id, u.picture, u.firstname, u.lastname, arty, sname, rname, u.firstnamephonetic, u.lastnamephonetic,
                  u.middlename, u.alternatename, u.imagealt, u.email, u.idnumber $fields",
-    "{user} u LEFT JOIN (SELECT DISTINCT eu2_u.id
+    "{user} u LEFT JOIN (SELECT DISTINCT eu2_u.id, ra.arty, ra.sname, ra.rname
                              FROM {user} eu2_u
                              JOIN {user_enrolments} ej2_ue ON ej2_ue.userid = eu2_u.id
                              JOIN {enrol} ej2_e ON (ej2_e.id = ej2_ue.enrolid AND ej2_e.courseid = :courseid)
-                             JOIN (SELECT DISTINCT userid
+                             JOIN (SELECT DISTINCT userid, r.archetype as arty, r.name as rname, r.shortname as sname
                                 FROM {role_assignments} ras
-                                JOIN {role} r ON  r.id = ras.roleid AND r.archetype $rolessql
+                                JOIN {role} r ON  r.id = ras.roleid
                                WHERE contextid $ctxsql
+                                 AND r.id $rolessql
                              ) ra ON ra.userid = eu2_u.id",
                         " 1 = 1 AND eu2_u.deleted = 0 AND eu2_u.id <> 1 AND eu2_u.deleted = 0) eu ON eu.id=u.id
                         WHERE u.deleted = 0 AND eu.id=u.id", $params);
@@ -144,12 +167,30 @@ $selects[] = [
 
 $templateinfo['selects'] = $selects;
 
+$templateinfo['roleselects'] = $roleselects;
+$roptions = $roleselects;
+$rselects = [];
+
+$rselects[] = [
+    'roptions' => array_map(function($roption) use ($roptions, $rolesel) {
+        return [
+        'rname' => $roptions[$roption],
+        'rvalue' => $roption,
+        'rselected' => in_array($roption, $rolesel)
+        ];
+    }, array_keys($roptions))
+    ];
+
+ $templateinfo['rselects'] = $rselects;
+
 $templateinfo['selected' . $perpage] = true;
-$renderer = $PAGE->get_renderer('core');
+$output = $PAGE->get_renderer('core');
+
+$configs = get_config('report_bbbparticipation', 'roles_shown');
 
 if (!$table->is_downloading()) {
     echo $output->header();
-    echo $renderer->render_from_template('report_bbbparticipation/reportform', $templateinfo);
+    echo $output->render_from_template('report_bbbparticipation/reportform', $templateinfo);
     $table->out($perpage, false);
     echo $output->footer();
 }

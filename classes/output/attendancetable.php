@@ -48,23 +48,8 @@ class attendancetable extends table_sql {
     /** @var int course id */
     private $courseid;
 
-    /** @var string text for the edit icon */
-    private $editicontext;
-
-    /** @var string text for the delete icon */
-    private $deleteicontext;
-
-    /** @var string text for the preview icon */
-    private $previewicontext;
-
-    /** @var string jump back url if a question is getting deleted */
-    private $returnurl;
-
     /** @var array array to save previously looked up authors */
     private $authors;
-
-    /** @var object course module context */
-    private $context;
 
     /**
      * studentviewtable constructor.
@@ -75,9 +60,10 @@ class attendancetable extends table_sql {
      * @param array $fieldnames
      * @param array $fieldheaders
      * @param int $perpage
+     * @param bool $usename
      * @throws \coding_exception
      */
-    public function __construct($uniqueid, $cmid, $callbackurl, $courseid, $fieldnames, $fieldheaders, $perpage) {
+    public function __construct($uniqueid, $cmid, $callbackurl, $courseid, $fieldnames, $fieldheaders, $perpage, $usename) {
         parent::__construct($uniqueid);
         $this->cmid = $cmid;
         $this->courseid = $courseid;
@@ -85,7 +71,11 @@ class attendancetable extends table_sql {
         $this->authors = array();
         $this->perpage = $perpage;
 
-        $columns = array('fullname', 'idnumber');
+        $rolecolumn = 'sname';
+        if ($usename) {
+            $rolecolumn = 'rname';
+        }
+        $columns = array('fullname', $rolecolumn, 'idnumber');
         $columns = array_merge($columns, $fieldnames);
 
         $this->define_columns($columns);
@@ -93,6 +83,7 @@ class attendancetable extends table_sql {
         // Define the titles of columns to show in header.
         $headers = array(
             get_string('fullname'),
+            get_string('role'),
             get_string('idnumber'),
         );
         $headers = array_merge($headers, $fieldheaders);

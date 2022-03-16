@@ -32,5 +32,11 @@ if ($ADMIN->fulltree) {
         get_string('additionaluserinfo_description', 'report_bbbparticipation'),
         1
         ));
+    $allroles = role_fix_names(get_all_roles(), null, ROLENAME_ORIGINALANDSHORT, true);
+    $defaultteacherroles = $DB->get_fieldset_select('role', 'id',
+        "archetype = 'editingteacher' OR archetype = 'student' OR archetype = 'teacher'");
+    $settings->add(new admin_setting_configmultiselect('report_bbbparticipation/roles_shown',
+        get_string('roles_shown', 'report_bbbparticipation'), get_string('roles_shown_desc',
+            'report_bbbparticipation'), $defaultteacherroles, $allroles));
 }
 
