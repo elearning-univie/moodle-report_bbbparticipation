@@ -17,13 +17,13 @@ Description
 * The admin settings:
 
   Showing the ID-Number in the report is optional. By default, it will be shown.
-  As admin you can choose what roles from you respective moodle instance will be 
+  As admin you can choose what roles from your moodle instance will be 
   shown in the reports.
 
 * The report settings:
 
   As teacher you can either display all BigBlueButton activities in your course at once or
-  select one or more activity.
+  select one or more activities.
   Also you can select which roles should be shown in the table. 
   
 Requirements

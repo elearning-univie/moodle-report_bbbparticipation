@@ -39,10 +39,8 @@ class bbb_observer {
 
         $courseid = $event->courseid;
         $bbbid = $event->objectid;
-        $url = new \moodle_url('/report/bbbparticipation/index.php');
-        $url->param('id', $courseid);
-        $url->param('sesskey', sesskey());
-        $url->param('bbbs[]', $bbbid);
+        $url = new \moodle_url('/report/bbbparticipation/index.php',
+            ['id' => $courseid, 'sesskey' => sesskey(), 'bbbs[]' => $bbbid]);
         $linktext = get_string('bbbparticipation:view', 'report_bbbparticipation');
         $PAGE->requires->js_call_amd('report_bbbparticipation/bbbreportlink', 'init',
             ['reportlink' => $url->out(false), 'linktext' => $linktext]);

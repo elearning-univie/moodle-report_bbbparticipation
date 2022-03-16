@@ -20,7 +20,7 @@
  * @copyright 2022 University of Vienna
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-define(['jquery'], function (){
+define([], function (){
     return {
         init: function(reportlink, linktext) {
             var a = document.createElement('a');
