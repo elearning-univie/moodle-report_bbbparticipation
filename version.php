@@ -24,7 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$plugin->version   = 2021121400.01;
+$plugin->version   = 2021121401;
 $plugin->requires  = 2020061501;
 $plugin->component = 'report_bbbparticipation';
 $plugin->maturity = MATURITY_STABLE;
